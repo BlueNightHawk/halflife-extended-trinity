@@ -428,7 +428,7 @@ void CBSPRenderer::VidInit( void )
 		for(int i = 0; i < MAX_DYNLIGHTS; i++)
 		{
 			if(m_pDynLights[i].depth)
-				glDeleteTextures(1, (GLuint *)m_pDynLights[i].depth);
+				glDeleteTextures(1, (GLuint *)&m_pDynLights[i].depth);
 		}
 	}
 
