@@ -14,7 +14,7 @@ void Draw_ClearBounds (void)
 {
 }
 
-void Draw_AddToBounds (vec3_t v)
+void Draw_AddToBounds (Vector v)
 {
 }
 
@@ -38,7 +38,7 @@ void Draw_SetBlack (void)
 {
 }
 
-void DrawPoint (vec3_t v)
+void DrawPoint (Vector v)
 {
 }
 
@@ -50,7 +50,7 @@ void DrawWinding (winding_t *w)
 {
 }
 
-void DrawTri (vec3_t p1, vec3_t p2, vec3_t p3)
+void DrawTri (Vector p1, Vector p2, Vector p3)
 {
 }
 

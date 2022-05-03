@@ -314,6 +314,9 @@ void CBaseDoor::Spawn( )
 	}
 	else
 	{// special contents
+		//RENDERERS START
+		pev->effects |= FL_WATERSHADER;
+		//RENDERERS END
 		pev->solid		= SOLID_NOT;
 		SetBits( pev->spawnflags, SF_DOOR_SILENT );	// water is silent for now
 	}

@@ -234,6 +234,10 @@ bool CKnife::Swing( const bool bFirst )
 
 		SetThink( &CKnife::Smack );
 		pev->nextthink = gpGlobals->time + 0.2;
+		
+		//RENDERERS START
+		DecalGunshot(&tr, BULLET_PLAYER_CROWBAR, vecSrc, vecEnd);
+		//RENDERERS END
 #endif
 	}
 	return bDidHit;
@@ -246,7 +250,7 @@ void CKnife::SwingAgain()
 
 void CKnife::Smack()
 {
-	DecalGunshot( &m_trHit, BULLET_PLAYER_CROWBAR );
+	return;
 }
 
 int CKnife::iItemSlot()

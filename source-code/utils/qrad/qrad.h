@@ -47,9 +47,9 @@ typedef struct directlight_s
 	struct directlight_s *next;
 	emittype_t	type;
     int			style;
-	vec3_t		origin;
-	vec3_t		intensity;
-	vec3_t		normal;		// for surfaces and spotlights
+	Vector		origin;
+	Vector		intensity;
+	Vector		normal;		// for surfaces and spotlights
 	float		stopdot;		// for spotlights
 	float		stopdot2;		// for spotlights
 } directlight_t;
@@ -70,12 +70,12 @@ typedef struct
 typedef struct patch_s
 {
 	winding_t	*winding;
-	vec3_t		mins, maxs, face_mins, face_maxs;
+	Vector		mins, maxs, face_mins, face_maxs;
 	struct patch_s		*next;		// next in face
 	int			numtransfers;
 	transfer_t	*transfers;
-	vec3_t		origin;
-	vec3_t		normal;
+	Vector		origin;
+	Vector		normal;
 
 	dplane_t	*plane;
 
@@ -84,24 +84,24 @@ typedef struct patch_s
 
 	qboolean	sky;
 
-	vec3_t		totallight;			// accumulated by radiosity
+	Vector		totallight;			// accumulated by radiosity
 									// does NOT include light
 									// accounted for by direct lighting
-	vec3_t		baselight;			// emissivity only
-	vec3_t		directlight;		// direct light value
+	Vector		baselight;			// emissivity only
+	Vector		directlight;		// direct light value
 	float		area;
 
-	vec3_t		reflectivity;		// Average RGB of texture, modified by material type.
+	Vector		reflectivity;		// Average RGB of texture, modified by material type.
 
-	vec3_t		samplelight;
+	Vector		samplelight;
 	int			samples;		// for averaging direct light
 	int			faceNumber;
 } patch_t;
 
 extern	patch_t		*face_patches[MAX_MAP_FACES];
 extern	entity_t	*face_entity[MAX_MAP_FACES];
-extern	vec3_t		face_offset[MAX_MAP_FACES];		// for rotating bmodels
-extern  vec3_t		face_centroids[MAX_MAP_EDGES];
+extern	Vector		face_offset[MAX_MAP_FACES];		// for rotating bmodels
+extern  Vector		face_centroids[MAX_MAP_EDGES];
 extern	patch_t		patches[MAX_PATCHES];
 extern	unsigned	num_patches;
 
@@ -128,7 +128,7 @@ void TouchVMFFile (void);
 //==============================================
 
 extern  qboolean extra;
-extern	vec3_t ambient;
+extern	Vector ambient;
 extern  float maxlight;
 extern	unsigned numbounce;
 extern	directlight_t	*directlights[MAX_MAP_LEAFS];
@@ -145,12 +145,12 @@ int PartialHead (void);
 void BuildFacelights (int facenum);
 void PrecompLightmapOffsets();
 void FinalLightFace (int facenum);
-void PvsForOrigin (vec3_t org, byte *pvs);
-int TestLine_r (int node, vec3_t start, vec3_t stop);
+void PvsForOrigin (Vector org, byte *pvs);
+int TestLine_r (int node, Vector start, Vector stop);
 void CreateDirectLights (void);
 void DeleteDirectLights (void);
 int ProgressiveRefinement (void);
 vec_t PatchPlaneDist( patch_t *patch );
-void GetPhongNormal( int facenum, vec3_t spot, vec3_t phongnormal );
+void GetPhongNormal( int facenum, Vector spot, Vector phongnormal );
 
-dleaf_t		*PointInLeaf (vec3_t point);
+dleaf_t		*PointInLeaf (Vector point);

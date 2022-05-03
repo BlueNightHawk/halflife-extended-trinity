@@ -25,6 +25,21 @@
 #include "com_model.h"
 #include "studio_util.h"
 
+//RENDERERS START
+#include "bsprenderer.h"
+#include "propmanager.h"
+#include "particle_engine.h"
+#include "watershader.h"
+#include "mirrormanager.h"
+
+#include "studio.h"
+#include "StudioModelRenderer.h"
+#include "GameStudioModelRenderer.h"
+
+extern CGameStudioModelRenderer g_StudioRenderer;
+//RENDERERS END
+
+
 extern IParticleMan *g_pParticleMan;
 
 // rain tutorial
@@ -63,7 +78,7 @@ void DrawRain(void)
     if (FirstChainDrip.p_Next == NULL)
         return; // no drips to draw
     
-    HSPRITE hsprTexture;
+    int hsprTexture;
     const model_s * pTexture;
     float visibleHeight = Rain.globalHeight - SNOWFADEDIST;
     
@@ -209,7 +224,7 @@ void DrawFXObjects(void)
     float curtime = gEngfuncs.GetClientTime();
 
     // usual triapi stuff
-    HSPRITE hsprTexture;
+    int hsprTexture;
   
     const model_s * pTexture;
   
@@ -276,6 +291,11 @@ void DLLEXPORT HUD_DrawNormalTriangles()
 {
 //	RecClDrawNormalTriangles();
 
+//RENDERERS START
+    //2012-02-25
+    R_DrawNormalTriangles();
+    //RENDERERS END
+
 	gHUD.m_Spectator.DrawOverview();
 
 	gFog.HUD_DrawNormalTriangles();
@@ -299,6 +319,10 @@ void DLLEXPORT HUD_DrawTransparentTriangles()
 #if defined( _TFC )
 	RunEventList();
 #endif
+    //RENDERERS START
+        //2012-02-25
+    R_DrawTransparentTriangles();
+    //RENDERERS END
 
 	if ( g_pParticleMan )
 		 g_pParticleMan->Update();

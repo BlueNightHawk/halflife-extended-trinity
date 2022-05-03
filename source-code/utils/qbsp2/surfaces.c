@@ -43,7 +43,7 @@ void SubdivideFace (face_t *f, face_t **prevptr)
 	dplane_t	plane;
 	face_t		*front, *back, *next;
 	texinfo_t	*tex;
-	vec3_t		temp;
+	Vector		temp;
 
 // special (non-surface cached) faces don't need subdivision
 
@@ -136,7 +136,7 @@ int TexelSize( face_t *f )
 	dplane_t	plane;
 	face_t		*front, *back, *next;
 	texinfo_t	*tex;
-	vec3_t		temp;
+	Vector		temp;
 
 // special (non-surface cached) faces don't need subdivision
 	if ( f->texturenum > numtexinfo )
@@ -185,7 +185,7 @@ int TexelSize( face_t *f )
 typedef struct hashvert_s
 {
 	struct hashvert_s	*next;
-	vec3_t	point;
+	Vector	point;
 	int		num;
 	int		numplanes;		// for corner determination
 	int		planenums[2];
@@ -210,11 +210,11 @@ int		firstmodelface;
 
 hashvert_t	*hashverts[NUM_HASH];
 
-static	vec3_t	hash_min, hash_scale;
+static	Vector	hash_min, hash_scale;
 
 static	void InitHash (void)
 {
-	vec3_t	size;
+	Vector	size;
 	vec_t	volume;
 	vec_t	scale;
 	int		newsize[2];
@@ -242,7 +242,7 @@ static	void InitHash (void)
 	hvert_p = hvertex;
 }
 
-static	unsigned HashVec (vec3_t vec)
+static	unsigned HashVec (Vector vec)
 {
 	unsigned	h;
 	
@@ -259,12 +259,12 @@ static	unsigned HashVec (vec3_t vec)
 GetVertex
 =============
 */
-int	GetVertex (vec3_t in, int planenum)
+int	GetVertex (Vector in, int planenum)
 {
 	int			h;
 	int			i;
 	hashvert_t	*hv;
-	vec3_t		vert;
+	Vector		vert;
 	
 	for (i=0 ; i<3 ; i++)
 	{
@@ -333,7 +333,7 @@ Don't allow four way edges
 */
 int	c_tryedges;
 
-int GetEdge (vec3_t p1, vec3_t p2, face_t *f)
+int GetEdge (Vector p1, Vector p2, face_t *f)
 {
 	int		v1, v2;
 	dedge_t	*edge;

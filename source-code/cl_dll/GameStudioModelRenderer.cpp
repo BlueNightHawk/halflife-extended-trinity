@@ -27,6 +27,10 @@
 #include "GameStudioModelRenderer.h"
 #include "Exports.h"
 
+// RENDERER START
+#include "bsprenderer.h"
+// RENDERER END 
+
 //
 // Override the StudioModelRender virtual member functions here to implement custom bone
 // setup, blending, etc.
@@ -59,6 +63,10 @@ R_StudioDrawPlayer
 */
 int R_StudioDrawPlayer( int flags, entity_state_t *pplayer )
 {
+	// RENDERER START
+	gBSPRenderer.DrawNormalTriangles();
+	// RENDERER END 
+	g_StudioRenderer.m_pCurrentEntity = IEngineStudio.GetCurrentEntity();
 	return g_StudioRenderer.StudioDrawPlayer( flags, pplayer );
 }
 
@@ -70,6 +78,12 @@ R_StudioDrawModel
 */
 int R_StudioDrawModel( int flags )
 {
+	// RENDERER START
+	if (IEngineStudio.GetCurrentEntity() != gEngfuncs.GetViewModel())
+		gBSPRenderer.DrawNormalTriangles();
+	// RENDERER END 
+
+	g_StudioRenderer.m_pCurrentEntity = IEngineStudio.GetCurrentEntity();
 	return g_StudioRenderer.StudioDrawModel( flags );
 }
 

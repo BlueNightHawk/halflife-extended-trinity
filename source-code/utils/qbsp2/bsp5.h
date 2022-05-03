@@ -28,7 +28,7 @@
 typedef struct
 {
 	int		numpoints;
-	vec3_t	points[8];			// variable sized
+	Vector	points[8];			// variable sized
 } winding_t;
 
 #define MAX_POINTS_ON_WINDING	128
@@ -58,7 +58,7 @@ typedef struct face_s
 	int				outputnumber;		// only valid for original faces after
 										// write surfaces
 	int				numpoints;
-	vec3_t			pts[MAXEDGES];		// FIXME: change to use winding_t
+	Vector			pts[MAXEDGES];		// FIXME: change to use winding_t
 } face_t;
 
 
@@ -66,7 +66,7 @@ typedef struct surface_s
 {
 	struct surface_s	*next;
 	int			planenum;
-	vec3_t		mins, maxs;
+	Vector		mins, maxs;
 	struct node_s	*onnode;		// true if surface has already been used
 									// as a splitting node
 	face_t		*faces;	// links to all the faces on either side of the surf
@@ -74,7 +74,7 @@ typedef struct surface_s
 
 typedef struct
 {
-	vec3_t		mins, maxs;
+	Vector		mins, maxs;
 	surface_t	*surfaces;
 } surfchain_t;
 
@@ -87,7 +87,7 @@ typedef struct node_s
 {
 	surface_t		*surfaces;
 
-	vec3_t			mins,maxs;		// bounding volume of portals;
+	Vector			mins,maxs;		// bounding volume of portals;
 
 // information for decision nodes	
 	int				planenum;		// -1 = leaf node	
@@ -161,7 +161,7 @@ extern	node_t	outside_node;		// portals outside the world face this
 
 void AddPortalToNodes (portal_t *p, node_t *front, node_t *back);
 void RemovePortalFromNode (portal_t *portal, node_t *l);
-void MakeHeadnodePortals (node_t *node, vec3_t mins, vec3_t maxs);
+void MakeHeadnodePortals (node_t *node, Vector mins, Vector maxs);
 
 void WritePortalfile (node_t *headnode);
 
@@ -192,16 +192,16 @@ void FinishBSPFile (void);
 
 // draw.c
 
-extern	vec3_t	draw_mins, draw_maxs;
+extern	Vector	draw_mins, draw_maxs;
 
 void Draw_ClearBounds (void);
-void Draw_AddToBounds (vec3_t v);
+void Draw_AddToBounds (Vector v);
 void Draw_DrawFace (face_t *f);
 void Draw_ClearWindow (void);
 void Draw_SetRed (void);
 void Draw_SetGrey (void);
 void Draw_SetBlack (void);
-void DrawPoint (vec3_t v);
+void DrawPoint (Vector v);
 
 void Draw_SetColor (int c);
 void SetColor (int c);
@@ -209,7 +209,7 @@ void DrawPortal (portal_t *p);
 void DrawLeaf (node_t *l, int color);
 
 void DrawWinding (winding_t *w);
-void DrawTri (vec3_t p1, vec3_t p2, vec3_t p3);
+void DrawTri (Vector p1, Vector p2, Vector p3);
 
 //=============================================================================
 

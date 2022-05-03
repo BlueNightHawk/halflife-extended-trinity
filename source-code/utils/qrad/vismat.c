@@ -28,7 +28,7 @@ Use the PVS to accelerate if available
 */
 byte	*vismatrix;
 
-dleaf_t		*PointInLeaf (vec3_t point)
+dleaf_t		*PointInLeaf (Vector point)
 {
 	int		nodenum;
 	vec_t	dist;
@@ -51,7 +51,7 @@ dleaf_t		*PointInLeaf (vec3_t point)
 }
 
 
-void PvsForOrigin (vec3_t org, byte *pvs)
+void PvsForOrigin (Vector org, byte *pvs)
 {
 	dleaf_t	*leaf;
 

@@ -37,6 +37,23 @@
 #include "..\discord_sdk\include\discord_rpc.h"
 #include "time.h"
 
+//RENDERERS START
+#include "bsprenderer.h"
+#include "propmanager.h"
+#include "textureloader.h"
+#include "particle_engine.h"
+#include "watershader.h"
+#include "mirrormanager.h"
+#include "r_efx.h"
+
+#include "studio.h"
+#include "StudioModelRenderer.h"
+#include "GameStudioModelRenderer.h"
+
+extern CGameStudioModelRenderer g_StudioRenderer;
+extern engine_studio_api_t IEngineStudio;
+//RENDERERS END
+
 
 hud_player_info_t	 g_PlayerInfoList[MAX_PLAYERS + 1];	   // player info from the engine
 extra_player_info_t  g_PlayerExtraInfo[MAX_PLAYERS + 1];   // additional player info sent directly to the client dll
@@ -381,6 +398,45 @@ int __MsgFunc_StatsPlayer(const char* pszName, int iSize, void* pbuf)
 	return 0;
 }
 
+//RENDERERS START
+int __MsgFunc_SetFog(const char* pszName, int iSize, void* pbuf)
+{
+	return gHUD.MsgFunc_SetFog(pszName, iSize, pbuf);
+}
+int __MsgFunc_LightStyle(const char* pszName, int iSize, void* pbuf)
+{
+	return gHUD.MsgFunc_LightStyle(pszName, iSize, pbuf);
+}
+int __MsgFunc_CreateDecal(const char* pszName, int iSize, void* pbuf)
+{
+	return gBSPRenderer.MsgCustomDecal(pszName, iSize, pbuf);
+}
+int __MsgFunc_StudioDecal(const char* pszName, int iSize, void* pbuf)
+{
+	return gHUD.MsgFunc_StudioDecal(pszName, iSize, pbuf);
+}
+int __MsgFunc_SkyMark_S(const char* pszName, int iSize, void* pbuf)
+{
+	return gBSPRenderer.MsgSkyMarker_Sky(pszName, iSize, pbuf);
+}
+int __MsgFunc_SkyMark_W(const char* pszName, int iSize, void* pbuf)
+{
+	return gBSPRenderer.MsgSkyMarker_World(pszName, iSize, pbuf);
+}
+int __MsgFunc_DynLight(const char* pszName, int iSize, void* pbuf)
+{
+	return gBSPRenderer.MsgDynLight(pszName, iSize, pbuf);
+}
+int __MsgFunc_FreeEnt(const char* pszName, int iSize, void* pbuf)
+{
+	return gHUD.MsgFunc_FreeEnt(pszName, iSize, pbuf);
+}
+int __MsgFunc_Particle(const char* pszName, int iSize, void* pbuf)
+{
+	return gParticleEngine.MsgCreateSystem(pszName, iSize, pbuf);
+}
+//RENDERERS END
+
 // This is called every time the DLL is loaded
 void CHud::Init()
 {
@@ -441,6 +497,25 @@ void CHud::Init()
 
 	// VGUI Menus
 	HOOK_MESSAGE(VGUIMenu);
+
+	//RENDERERS START
+	HOOK_MESSAGE(SetFog);
+	HOOK_MESSAGE(LightStyle);
+	HOOK_MESSAGE(CreateDecal);
+	HOOK_MESSAGE(StudioDecal);
+	HOOK_MESSAGE(SkyMark_S);
+	HOOK_MESSAGE(SkyMark_W);
+	HOOK_MESSAGE(DynLight);
+	HOOK_MESSAGE(FreeEnt);
+	HOOK_MESSAGE(Particle);
+
+	gPropManager.Init();
+	gTextureLoader.Init();
+	gBSPRenderer.Init();
+	gParticleEngine.Init();
+	gWaterShader.Init();
+	gMirrorManager.Init();
+	//RENDERERS END
 
 	CVAR_CREATE("hud_classautokill", "1", FCVAR_ARCHIVE | FCVAR_USERINFO);		// controls whether or not to suicide immediately on TF class switch
 	CVAR_CREATE("hud_takesshots", "0", FCVAR_ARCHIVE);		// controls whether or not to automatically take screenshots at the end of a round
@@ -536,6 +611,11 @@ CHud :: ~CHud()
 		}
 		m_pHudList = NULL;
 	}
+
+	//RENDERERS START
+	gTextureLoader.Shutdown();
+	gBSPRenderer.Shutdown();
+	//RENDERERS END
 }
 
 // GetSpriteIndex()
@@ -594,7 +674,7 @@ void CHud::VidInit()
 			}
 
 			// allocated memory for sprite handle arrays
-			m_rghSprites = new HSPRITE[m_iSpriteCount];
+			m_rghSprites = new int[m_iSpriteCount];
 			m_rgrcRects = new wrect_t[m_iSpriteCount];
 			m_rgszSpriteNames = new char[m_iSpriteCount * MAX_SPRITE_NAME_LENGTH];
 
@@ -662,6 +742,16 @@ void CHud::VidInit()
 	m_PlayerBrowse.VidInit();
 	m_Zoom.VidInit();
 	gFog.VidInit();
+
+
+	//RENDERERS START
+	gTextureLoader.VidInit();
+	gWaterShader.VidInit();
+	gBSPRenderer.VidInit();
+	gParticleEngine.VidInit();
+	gMirrorManager.VidInit();
+	g_StudioRenderer.VidInit();
+	//RENDERERS_END
 
 	GetClientVoiceMgr()->VidInit();
 

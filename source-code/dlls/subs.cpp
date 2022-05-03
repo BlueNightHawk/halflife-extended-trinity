@@ -27,6 +27,10 @@
 #include "nodes.h"
 #include "doors.h"
 
+//RENDERERS START
+#include "UserMessages.h"
+//RENDERERS END
+
 extern CGraph WorldGraph;
 
 extern BOOL FEntIsVisible(entvars_t* pev, entvars_t* pevTarget);
@@ -120,6 +124,15 @@ void CBaseEntity :: SUB_Remove()
 		pev->health = 0;
 		ALERT( at_aiconsole, "SUB_Remove called on entity with health > 0\n");
 	}
+	//RENDERERS START
+	if (gmsgFreeEnt)
+	{
+		MESSAGE_BEGIN(MSG_ALL, gmsgFreeEnt);
+		WRITE_SHORT(entindex());
+		MESSAGE_END();
+	}
+	//RENDERERS END
+
 
 	REMOVE_ENTITY(ENT(pev));
 }

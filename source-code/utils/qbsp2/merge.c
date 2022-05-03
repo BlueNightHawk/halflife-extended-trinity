@@ -25,7 +25,7 @@ CheckColinear
 void CheckColinear (face_t *f)
 {
 	int			i, j;
-	vec3_t		v1, v2;
+	Vector		v1, v2;
 	
 	for (i=0 ; i<f->numpoints ;i++)
 	{
@@ -62,7 +62,7 @@ face_t *TryMerge (face_t *f1, face_t *f2)
 	vec_t		*p1, *p2, *p3, *p4, *back;
 	face_t		*newf;
 	int			i, j, k, l;
-	vec3_t		normal, delta, planenormal;
+	Vector		normal, delta, planenormal;
 	vec_t		dot;
 	dplane_t	*plane;
 	qboolean		keep1, keep2;

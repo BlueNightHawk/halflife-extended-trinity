@@ -52,10 +52,10 @@ EXTERN	float		normal_blend;
 EXTERN	int			dump_hboxes;
 EXTERN	int			ignore_warnings;
 
-EXTERN	vec3_t		eyeposition;
+EXTERN	Vector		eyeposition;
 EXTERN	int			gflags;
-EXTERN	vec3_t		bbox[2];
-EXTERN	vec3_t		cbox[2];
+EXTERN	Vector		bbox[2];
+EXTERN	Vector		cbox[2];
 
 EXTERN	int			maxseqgroupsize;
 
@@ -82,14 +82,14 @@ typedef struct {
 typedef struct 
 {
 	int					bone;		// bone transformation index
-	vec3_t				org;		// original position
+	Vector				org;		// original position
 } s_vertex_t;
 
 typedef struct 
 {
 	int					skinref;
 	int					bone;		// bone transformation index
-	vec3_t				org;		// original position
+	Vector				org;		// original position
 } s_normal_t;
 
 
@@ -99,7 +99,7 @@ typedef struct
 // dstudiobone_t bone[MAXSTUDIOBONES];
 typedef struct 
 {
-	vec3_t	worldorg;
+	Vector	worldorg;
 	float m[3][4];
 	float im[3][4];
 	float length;
@@ -114,12 +114,12 @@ typedef struct
 	int				bonecontroller;	// -1 == 0
 	int				flags;		// X, Y, Z, XR, YR, ZR
 	// short		value[6];	// default DoF values
-	vec3_t			pos;		// default pos
-	vec3_t			posscale;	// pos values scale
-	vec3_t			rot;		// default pos
-	vec3_t			rotscale;	// rotation values scale
+	Vector			pos;		// default pos
+	Vector			posscale;	// pos values scale
+	Vector			rot;		// default pos
+	Vector			rotscale;	// rotation values scale
 	int				group;		// hitgroup
-	vec3_t			bmin, bmax;	// bounding box
+	Vector			bmin, bmax;	// bounding box
 } s_bonetable_t;
 EXTERN	s_bonetable_t bonetable[MAXSTUDIOSRCBONES];
 
@@ -138,7 +138,7 @@ typedef struct
 	int				bone;
 	int				group;		// hitgroup
 	int				model;
-	vec3_t			bmin, bmax;	// bounding box
+	Vector			bmin, bmax;	// bounding box
 } s_bbox_t;
 EXTERN s_bbox_t hitbox[MAXSTUDIOSRCBONES];
 
@@ -172,7 +172,7 @@ typedef struct
 	int		index;
 	int		bone;
 	int		type;
-	vec3_t	org;
+	Vector	org;
 } s_attachment_t;
 
 s_attachment_t attachment[MAXSTUDIOSRCBONES];
@@ -199,8 +199,8 @@ typedef struct
 	s_node_t		node[MAXSTUDIOSRCBONES];
 	int				bonemap[MAXSTUDIOSRCBONES];
 	int				boneimap[MAXSTUDIOSRCBONES];
-	vec3_t			*pos[MAXSTUDIOSRCBONES];
-	vec3_t			*rot[MAXSTUDIOSRCBONES];
+	Vector			*pos[MAXSTUDIOSRCBONES];
+	Vector			*rot[MAXSTUDIOSRCBONES];
 	int				numanim[MAXSTUDIOSRCBONES][6];
 	mstudioanimvalue_t *anim[MAXSTUDIOSRCBONES][6];
 } s_animation_t;
@@ -217,7 +217,7 @@ typedef struct
 typedef struct 
 {
 	int				index;
-	vec3_t			org;
+	Vector			org;
 	int				start;
 	int				end;
 } s_pivot_t;
@@ -226,7 +226,7 @@ EXTERN	int numseq;
 typedef struct 
 {
 	int				motiontype;
-	vec3_t			linearmovement;
+	Vector			linearmovement;
 
 	char			name[64];
 	int				flags;
@@ -250,14 +250,14 @@ typedef struct
 	float			blendstart[2];
 	float			blendend[2];
 
-	vec3_t			automovepos[MAXSTUDIOANIMATIONS];
-	vec3_t			automoveangle[MAXSTUDIOANIMATIONS];
+	Vector			automovepos[MAXSTUDIOANIMATIONS];
+	Vector			automoveangle[MAXSTUDIOANIMATIONS];
 
 	int				seqgroup;
 	int				animindex;
 
-	vec3_t 			bmin;
-	vec3_t			bmax;
+	Vector 			bmin;
+	Vector			bmax;
 
 	int				entrynode;
 	int				exitnode;
@@ -336,8 +336,8 @@ typedef struct
 
 typedef struct 
 {
-	vec3_t			pos;
-	vec3_t			rot;
+	Vector			pos;
+	Vector			rot;
 } s_bone_t;
 
 
@@ -352,7 +352,7 @@ typedef struct s_model_s
 	int	bonemap[MAXSTUDIOSRCBONES]; // local bone to world bone mapping
 	int	boneimap[MAXSTUDIOSRCBONES]; // world bone to local bone mapping
 
-	vec3_t boundingbox[MAXSTUDIOSRCBONES][2];
+	Vector boundingbox[MAXSTUDIOSRCBONES][2];
 
 	s_mesh_t *trimesh[MAXSTUDIOTRIANGLES];
 	int trimap[MAXSTUDIOTRIANGLES];
@@ -378,8 +378,8 @@ EXTERN	s_model_t *model[MAXSTUDIOMODELS];
 
 
 
-EXTERN	vec3_t adjust;
-EXTERN	vec3_t defaultadjust;
+EXTERN	Vector adjust;
+EXTERN	Vector defaultadjust;
 
 typedef struct
 {

@@ -95,7 +95,7 @@ When there are a huge number of planes, just choose one closest
 to the middle.
 ==================
 */
-surface_t *ChooseMidPlaneFromList (surface_t *surfaces, vec3_t mins, vec3_t maxs)
+surface_t *ChooseMidPlaneFromList (surface_t *surfaces, Vector mins, Vector maxs)
 {
 	int			j,l;
 	surface_t	*p, *bestsurface;
@@ -167,7 +167,7 @@ ChoosePlaneFromList
 Choose the plane that splits the least faces
 ==================
 */
-surface_t *ChoosePlaneFromList (surface_t *surfaces, vec3_t mins, vec3_t maxs)
+surface_t *ChoosePlaneFromList (surface_t *surfaces, Vector mins, Vector maxs)
 {
 	int			j,k,l;
 	surface_t	*p, *p2, *bestsurface;

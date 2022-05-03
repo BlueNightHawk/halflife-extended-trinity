@@ -16,6 +16,8 @@
 #include "util.h"
 #include "cbase.h"
 
+#if 0
+
 const auto SF_ITEMGENERIC_DROP_TO_FLOOR = 1 << 0;
 
 class CGenericItem : public CBaseAnimating
@@ -124,3 +126,5 @@ void CGenericItem::Use( CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE 
 	SetThink( &CGenericItem::SUB_Remove );
 	pev->nextthink = gpGlobals->time + 0.1;
 }
+
+#endif

@@ -1,19 +1,33 @@
-//========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================
+/*
+Trinity Rendering Engine - Copyright Andrew Lucas 2009-2012
 
-#include <com_model.h>
+The Trinity Engine is free software, distributed in the hope th-
+at it will be useful, but WITHOUT ANY WARRANTY; without even the
+implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE. See the GNU Lesser General Public License for more det-
+ails.
+
+Model Renderer
+Original code by Valve
+Additional code written by Andrew Lucas
+Transparency code by Neil "Jed" Jedrzejewski
+*/
+
 #if !defined ( STUDIOMODELRENDERER_H )
 #define STUDIOMODELRENDERER_H
 #if defined( _WIN32 )
 #pragma once
 #endif
 
+#include "PlatformHeaders.h"
+#include <gl/GL.h>
+#include "gl/glext.h"
+#include "dlight.h"
 
-extern int g_iViewmodelSkin;
+#include "rendererdefs.h"
+
+#define MAX_FRAGMENT_SHADERS 2
+
 /*
 ====================
 CStudioModelRenderer
@@ -24,11 +38,12 @@ class CStudioModelRenderer
 {
 public:
 	// Construction/Destruction
-	CStudioModelRenderer();
-	virtual ~CStudioModelRenderer();
+	CStudioModelRenderer(void);
+	virtual ~CStudioModelRenderer(void);
 
 	// Initialization
-	virtual void Init();
+	virtual void Init(void);
+	virtual void VidInit(void);
 
 public:
 	// Public Interfaces
@@ -46,19 +61,13 @@ public:
 	virtual void StudioSetUpTransform(int trivial_accept);
 
 	// Set up model bone positions
-	virtual void StudioSetupBones();
+	virtual void StudioSetupBones(void);
 
 	// Find final attachment points
-	virtual void StudioCalcAttachments();
-
-	// Save bone matrices and names
-	virtual void StudioSaveBones();
-
-	// Merge cached bones with current bones for model
-	virtual void StudioMergeBones(model_t* m_pSubModel);
+	virtual void StudioCalcAttachments(void);
 
 	// Determine interpolation fraction
-	virtual float StudioEstimateInterpolant();
+	virtual float StudioEstimateInterpolant(void);
 
 	// Determine current frame for rendering
 	virtual float StudioEstimateFrame(mstudioseqdesc_t* pseqdesc);
@@ -82,14 +91,13 @@ public:
 	virtual void StudioCalcRotations(float pos[][3], vec4_t* q, mstudioseqdesc_t* pseqdesc, mstudioanim_t* panim, float f);
 
 	// Send bones and verts to renderer
-	virtual void StudioRenderModel();
+	virtual void StudioRenderModel(void);
 
 	// Finalize rendering
-	virtual void StudioRenderFinal();
+	virtual void StudioRenderFinal(void);
 
-	// GL&D3D vs. Software renderer finishing functions
-	virtual void StudioRenderFinal_Software();
-	virtual void StudioRenderFinal_Hardware();
+	virtual void StudioSaveBones(void);
+	virtual void StudioMergeBones(model_t* m_pSubModel);
 
 	// Player specific data
 	// Determine pitch and blending amounts for players
@@ -100,9 +108,6 @@ public:
 
 	// Process movement of player
 	virtual void StudioProcessGait(entity_state_t* pplayer);
-
-	// Sets bounding box
-	virtual void StudioGetMinsMaxs(Vector& outMins, Vector& outMaxs);
 
 public:
 
@@ -158,18 +163,6 @@ public:
 	// Sprite model used for drawing studio model chrome
 	model_t* m_pChromeSprite;
 
-	// Caching
-	// Number of bones in bone cache
-	int				m_nCachedBones;
-	// Names of cached bones
-	char			m_nCachedBoneNames[MAXSTUDIOBONES][32];
-	// Cached bone & light transformation matrices
-	float			m_rgCachedBoneTransform[MAXSTUDIOBONES][3][4];
-	float			m_rgCachedLightTransform[MAXSTUDIOBONES][3][4];
-
-	// Software renderer scale factors
-	float			m_fSoftwareXScale, m_fSoftwareYScale;
-
 	// Current view vectors and render origin
 	float			m_vUp[3];
 	float			m_vRight[3];
@@ -190,6 +183,141 @@ public:
 	// Concatenated bone and light transforms
 	float(*m_pbonetransform)[MAXSTUDIOBONES][3][4];
 	float(*m_plighttransform)[MAXSTUDIOBONES][3][4];
+
+	// Caching
+	// Number of bones in bone cache
+	int				m_nCachedBones;
+	// Names of cached bones
+	char			m_nCachedBoneNames[MAXSTUDIOBONES][32];
+	// Cached bone & light transformation matrices
+	float			m_rgCachedBoneTransform[MAXSTUDIOBONES][3][4];
+
+public:
+	virtual void	StudioSetupModel(int bodypart);
+	virtual void	StudioDrawPoints(void);
+	virtual void	StudioDrawMesh(mstudiomesh_t* pmesh, mstudiotexture_t* ptex);
+	virtual void	StudioDrawWireframe(void);
+
+	virtual void	StudioSetupTextureHeader(void);
+	virtual void	StudioSetupRenderer(int rendermode);
+	virtual void	StudioRestoreRenderer(void);
+	virtual qboolean	StudioCheckBBox(void);
+
+	virtual void	StudioEntityLight(void);
+	virtual bool	StudioCullBBox(const Vector& mins, const Vector& maxs);
+
+	virtual void	StudioSetupLighting(void);
+	virtual int		StudioRecursiveLightPoint(entextrainfo_t* ext, mnode_t* node, const Vector& start, const Vector& end, Vector& color);
+
+	virtual void	StudioSetTextureFlags(void);
+	virtual void	StudioSetChromeVectors(void);
+	virtual void	StudioChromeForMesh(int j, mstudiomesh_t* pmesh);
+
+	virtual void	StudioSwapEngineCache(void);
+
+	virtual entextrainfo_t* StudioAllocExtraInfo(void);
+
+	virtual void	StudioDrawBBox(void);
+	virtual void	StudioDrawModelSolid(void);
+	virtual void	StudioDrawPointsSolid(void);
+
+	float			m_fChrome[MAXSTUDIOVERTS][2];
+	Vector			m_vChromeUp[MAXSTUDIOBONES];
+	Vector			m_vChromeRight[MAXSTUDIOBONES];
+
+	studiohdr_t* m_pTextureHeader;
+
+	Vector			m_vMins;
+	Vector			m_vMaxs;
+
+	Vector			m_vVertexTransform[MAXSTUDIOVERTS];	// transformed vertices
+	Vector			m_vNormalTransform[MAXSTUDIOVERTS]; // transformed normals
+
+	Vector* m_pVertexTransform; // pointer to vertex transform
+	Vector* m_pNormalTransform; // pointer to normal transform
+
+	lighting_ext	m_pLighting; // buz
+
+	mlight_t* m_pModelLights[MAX_MODEL_LIGHTS];
+	int				m_iNumModelLights;
+
+	entextrainfo_t	m_pExtraInfo[MAXRENDERENTS];
+	int				m_iNumExtraInfo;
+
+	float			m_fAlpha;
+
+	bool			m_bUseBlending;
+	bool			m_bExternalEntity;
+	bool			m_bChromeShell;
+
+	int				m_iCurrentBinding;
+	int				m_iEngineBinding;
+
+	GLuint			m_uiVertexShaders[MAX_MODEL_SHADERS];
+	GLuint			m_uiFragmentShaders[MAX_FRAGMENT_SHADERS];
+
+	cvar_t* m_pCvarDrawModels;
+	cvar_t* m_pCvarModelsBBoxDebug;
+	cvar_t* m_pCvarModelsLightDebug;
+	cvar_t* m_pCvarModelShaders;
+	cvar_t* m_pCvarModelDecals;
+	cvar_t* m_pCvarGlowShellFreq;
+
+	cvar_t* m_pCvarSkyVecX;
+	cvar_t* m_pCvarSkyVecY;
+	cvar_t* m_pCvarSkyVecZ;
+
+	cvar_t* m_pCvarSkyColorX;
+	cvar_t* m_pCvarSkyColorY;
+	cvar_t* m_pCvarSkyColorZ;
+
+public:
+	virtual void	StudioDrawExternalEntity(cl_entity_t* pEntity);
+	virtual void	StudioRenderModelEXT(void);
+	virtual void	StudioDrawPointsEXT(void);
+	virtual void	StudioDrawMeshEXT(mstudiotexture_t* ptex, vbomesh_t* pmesh);
+	virtual void	StudioDrawWireframeEXT(void);
+
+	virtual void	StudioDrawExternalEntitySolid(cl_entity_t* pEntity);
+	virtual void	StudioDrawPointsSolidEXT(void);
+
+	virtual void	StudioSaveModelData(modeldata_t* pExtraData);
+	virtual void	StudioSaveUniqueData(entextradata_t* pExtraData);
+	virtual void	StudioManageVertex(studiovert_t* pvert);
+
+	vboheader_t* m_pVBOHeader;
+	vbosubmodel_t* m_pVBOSubModel;
+
+	int				m_iNumEngineCacheModels;
+public:
+	virtual model_t* Mod_LoadModel(char* szName);
+	virtual void	Mod_LoadTexture(mstudiotexture_t* ptexture, byte* pbuffer, char* szmodelname);
+
+	model_t			m_pStudioModels[MAX_CACHE_MODELS];
+	int				m_iNumStudioModels;
+
+	studiovert_t	m_pRefArray[65535];
+	int				m_iNumRefVerts;
+
+	brushvertex_t	m_pVBOVerts[65535];
+	int				m_iNumVBOVerts;
+
+	unsigned int	m_usIndexes[65535];
+	int				m_iNumIndexes;
+	int				m_iCurStart;
+
+public:
+	virtual void	StudioDrawDecals(void);
+	virtual studiodecal_t* StudioAllocDecal(void);
+	virtual studiodecal_t* StudioAllocDecalSlot(void);
+
+	virtual void	StudioDecalExternal(Vector vpos, Vector vnorm, const char* name);
+	virtual void	StudioDecalForEntity(Vector position, Vector normal, const char* szName, cl_entity_t* pEntity);
+	virtual void	StudioDecalForSubModel(Vector position, Vector normal, studiodecal_t* decal);
+	virtual void	StudioDecalTriangle(studiotri_t* tri, Vector position, Vector normal, studiodecal_t* decal);
+
+	studiodecal_t	m_pStudioDecals[MAX_CUSTOMDECALS];
+	int				m_iNumStudioDecals;
 };
 
 #endif // STUDIOMODELRENDERER_H

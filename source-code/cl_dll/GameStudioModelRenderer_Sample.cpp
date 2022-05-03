@@ -40,10 +40,10 @@ extern engine_studio_api_t IEngineStudio;
 
 typedef struct
 {
-	vec3_t		origin;
-	vec3_t		angles;
+	Vector		origin;
+	Vector		angles;
 
-	vec3_t		realangles;
+	Vector		realangles;
 
 	float		animtime;
 	float		frame;
@@ -289,7 +289,7 @@ StudioEstimateGait
 void CGameStudioModelRenderer::StudioEstimateGait( entity_state_t *pplayer )
 {
 	float dt;
-	vec3_t est_velocity;
+	Vector est_velocity;
 
 	dt = (m_clTime - m_clOldTime);
 	dt = max( 0.0, dt );
@@ -712,7 +712,7 @@ _StudioDrawPlayer
 int CGameStudioModelRenderer::_StudioDrawPlayer( int flags, entity_state_t *pplayer )
 {
 	alight_t lighting;
-	vec3_t dir;
+	Vector dir;
 
 	m_pCurrentEntity = IEngineStudio.GetCurrentEntity();
 	IEngineStudio.GetTimes( &m_nFrameCount, &m_clTime, &m_clOldTime );
@@ -734,7 +734,7 @@ int CGameStudioModelRenderer::_StudioDrawPlayer( int flags, entity_state_t *ppla
 
 	if (pplayer->gaitsequence)
 	{
-		vec3_t orig_angles;
+		Vector orig_angles;
 		m_pPlayerInfo = IEngineStudio.PlayerInfo( m_nPlayerIndex );
 
 		VectorCopy( m_pCurrentEntity->angles, orig_angles );
@@ -793,7 +793,7 @@ int CGameStudioModelRenderer::_StudioDrawPlayer( int flags, entity_state_t *ppla
 		{
 			cl_entity_t *ent = gEngfuncs.GetEntityByIndex( m_pCurrentEntity->index );
 
-			memcpy( ent->attachment, m_pCurrentEntity->attachment, sizeof( vec3_t ) * 4 );
+			memcpy( ent->attachment, m_pCurrentEntity->attachment, sizeof( Vector ) * 4 );
 		}
 	}
 

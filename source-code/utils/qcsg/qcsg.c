@@ -37,7 +37,7 @@ qboolean	noclip;
 qboolean	onlyents;
 qboolean	wadtextures = true;
 
-vec3_t		world_mins, world_maxs;
+Vector		world_mins, world_maxs;
 
 /*
 ==================
@@ -233,7 +233,7 @@ void SaveOutside (brush_t *b, int hull, bface_t *outside, int mirrorcontents)
 	bface_t	*f , *next, *f2;
 	int		i;
 	int		planenum;
-	vec3_t	temp;
+	Vector	temp;
 
 	for (f=outside ; f ; f=next)
 	{
@@ -633,7 +633,7 @@ void ProcessModels (void)
 	int		placed;
 	int		first, contents;
 	brush_t	temp;
-	vec3_t	origin;
+	Vector	origin;
 
 	for (i=0 ; i<num_entities ; i++)
 	{

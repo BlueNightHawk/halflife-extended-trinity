@@ -57,7 +57,7 @@ void FindGCD (int *v)
 		v[i] /= smallest;
 }
 
-int	PlaneTypeForNormal (vec3_t normal)
+int	PlaneTypeForNormal (Vector normal)
 {
 	vec_t	ax, ay, az;
 	
@@ -93,7 +93,7 @@ int		FindIntPlane (int *inormal, int *iorigin)
 	int		i, j;
 	plane_t	*p, temp;
 	int		t;
-	vec3_t	origin;
+	Vector	origin;
 	qboolean	locked;
 
 	FindGCD (inormal);
@@ -316,14 +316,14 @@ This is done by brute force, and could easily get a lot faster if anyone cares.
 */
 
 #if 0
-vec3_t	hull_size[NUM_HULLS][2] = {
+Vector	hull_size[NUM_HULLS][2] = {
 { {0, 0, 0}, {0, 0, 0} },
 { {-16,-16,-32}, {16,16,24} },
 { {-32,-32,-64}, {32,32,24} }
 };
 #endif
 #if 1
-vec3_t	hull_size[NUM_HULLS][2] = {
+Vector	hull_size[NUM_HULLS][2] = {
 { {0, 0, 0}, {0, 0, 0} },
 { {-16,-16,-36}, {16,16,36} },// 32x32x72
 { {-32,-32,-32}, {32,32,32} }, // 64x64x64
@@ -339,8 +339,8 @@ typedef struct
 	brush_t	*b;
 	int		hullnum;
 	int		num_hull_points;
-	vec3_t	hull_points[MAX_HULL_POINTS];
-	vec3_t	hull_corners[MAX_HULL_POINTS*8];
+	Vector	hull_points[MAX_HULL_POINTS];
+	Vector	hull_corners[MAX_HULL_POINTS*8];
 	int		num_hull_edges;
 	int		hull_edges[MAX_HULL_EDGES][2];
 } expand_t;
@@ -426,7 +426,7 @@ void TestAddPlane (expand_t *ex, plane_t *plane)
 	vec_t	d;
 	vec_t	*corner;
 	plane_t	flip;
-	vec3_t	inv;
+	Vector	inv;
 	int		counts[3];
 	plane_t	*pl;
 	bface_t	*f, *nf;
@@ -494,12 +494,12 @@ AddHullPoint
 Doesn't add if duplicated
 =============
 */
-int AddHullPoint (expand_t *ex, vec3_t p)
+int AddHullPoint (expand_t *ex, Vector p)
 {
 	int		i, j;
 	vec_t	*c;
 	int		x,y,z;
-	vec3_t	r;
+	Vector	r;
 	
 	for (i=0 ; i<3 ; i++)
 		r[i] = floor (p[i]+0.5);
@@ -546,12 +546,12 @@ Creates all of the hull planes around the given edge, if not done allready
 
 #define ANGLEEPSILON	ON_EPSILON
 
-void AddHullEdge (expand_t *ex, vec3_t p1, vec3_t p2)
+void AddHullEdge (expand_t *ex, Vector p1, Vector p2)
 {
 	int		pt1, pt2;
 	int		i;
 	int		a, b, c, d, e;
-	vec3_t	edgevec, planeorg, planevec;
+	Vector	edgevec, planeorg, planevec;
 	plane_t	plane;
 	vec_t	l;
 	
@@ -770,7 +770,7 @@ restart:
 		if (h->mins[i] < -BOGUS_RANGE/2
 		|| h->maxs[i] > BOGUS_RANGE/2)
 		{
-			vec3_t eorigin = { 0, 0, 0};
+			Vector eorigin = { 0, 0, 0};
 			char *pszClass = "Unknown Class";
 			if ( b->entitynum )
 			{
@@ -800,7 +800,7 @@ qboolean MakeBrushPlanes (brush_t *b)
 	side_t	*s;
 	int		contents;
 	bface_t	*f;
-	vec3_t	origin;
+	Vector	origin;
 
 	//
 	// if the origin key is set (by an origin brush), offset all of the values

@@ -10,12 +10,12 @@
 typedef struct entity_s
 {
 	char	classname[64];
-	vec3_t	origin;
+	Vector	origin;
 	float	angle;
 	int		light;
 	int		style;
 	qboolean	targetent;
-	vec3_t	targetorigin;
+	Vector	targetorigin;
 } lightentity_t;
 
 extern	lightentity_t	lightentities[MAX_MAP_ENTITIES];
@@ -26,7 +26,7 @@ extern	int		numlightentities;
 #define	MAXLIGHTS			1024
 
 void LoadNodes (char *file);
-qboolean TestLine (vec3_t start, vec3_t stop);
+qboolean TestLine (Vector start, Vector stop);
 
 void LightFace (int surfnum);
 void LightLeaf (dleaf_t *leaf);
@@ -42,12 +42,12 @@ extern	int		c_culldistplane, c_proper;
 byte *GetFileSpace (int size);
 extern	byte		*filebase;
 
-extern	vec3_t	bsp_origin;
-extern	vec3_t	bsp_xvector;
-extern	vec3_t	bsp_yvector;
+extern	Vector	bsp_origin;
+extern	Vector	bsp_xvector;
+extern	Vector	bsp_yvector;
 
-void TransformSample (vec3_t in, vec3_t out);
-void RotateSample (vec3_t in, vec3_t out);
+void TransformSample (Vector in, Vector out);
+void RotateSample (Vector in, Vector out);
 
 extern	qboolean	extrasamples;
 

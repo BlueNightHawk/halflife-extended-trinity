@@ -20,7 +20,7 @@
 typedef struct tnode_s
 {
 	int		type;
-	vec3_t	normal;
+	Vector	normal;
 	float	dist;
 	int		children[2];
 	int		pad;
@@ -118,11 +118,11 @@ int PartialHead (void)
 //==========================================================
 
 
-int TestLine_r (int node, vec3_t start, vec3_t stop)
+int TestLine_r (int node, Vector start, Vector stop)
 {
 	tnode_t	*tnode;
 	float	front, back;
-	vec3_t	mid;
+	Vector	mid;
 	float	frac;
 	int		side;
 	int		r;
@@ -175,7 +175,7 @@ int TestLine_r (int node, vec3_t start, vec3_t stop)
 	return TestLine_r (tnode->children[!side], mid, stop);
 }
 
-int TestLine (vec3_t start, vec3_t stop)
+int TestLine (Vector start, Vector stop)
 {
 	return TestLine_r (0, start, stop);
 }
@@ -193,7 +193,7 @@ by recursive subdivision of the line by the BSP tree.
 
 typedef struct
 {
-	vec3_t	backpt;
+	Vector	backpt;
 	int		side;
 	int		node;
 } tracestack_t;
@@ -204,7 +204,7 @@ typedef struct
 TestLine
 ==============
 */
-qboolean _TestLine (vec3_t start, vec3_t stop)
+qboolean _TestLine (Vector start, Vector stop)
 {
 	int				node;
 	float			front, back;

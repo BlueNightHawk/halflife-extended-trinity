@@ -24,39 +24,70 @@
 #include "util.h"
 #include "cbase.h"
 
-
+//RENDERERS START
+#include "player.h"
+#include "UserMessages.h"
 
 class CLight : public CPointEntity
 {
 public:
-	void	KeyValue( KeyValueData* pkvd ) override;
-	void	Spawn() override;
-	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value ) override;
+	virtual void	KeyValue(KeyValueData* pkvd);
+	virtual void	SendInitMessage(CBasePlayer* player);
+	void EXPORT	LightStyleThink(void);
+	void	Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
-	int		Save( CSave &save ) override;
-	int		Restore( CRestore &restore ) override;
-	
+	virtual int		Save(CSave& save);
+	virtual int		Restore(CRestore& restore);
+
 	static	TYPEDESCRIPTION m_SaveData[];
 
 private:
 	int		m_iStyle;
 	int		m_iszPattern;
+	BOOL	m_bAlreadySent;
 };
-LINK_ENTITY_TO_CLASS( light, CLight );
+LINK_ENTITY_TO_CLASS(light, CLight);
 
-TYPEDESCRIPTION	CLight::m_SaveData[] = 
+TYPEDESCRIPTION	CLight::m_SaveData[] =
 {
-	DEFINE_FIELD( CLight, m_iStyle, FIELD_INTEGER ),
-	DEFINE_FIELD( CLight, m_iszPattern, FIELD_STRING ),
+	DEFINE_FIELD(CLight, m_iStyle, FIELD_INTEGER),
+	DEFINE_FIELD(CLight, m_iszPattern, FIELD_STRING),
+	DEFINE_FIELD(CLight, m_bAlreadySent, FIELD_BOOLEAN),
 };
 
-IMPLEMENT_SAVERESTORE( CLight, CPointEntity );
-
+IMPLEMENT_SAVERESTORE(CLight, CPointEntity);
 
 //
 // Cache user-entity-field values until spawn is called.
 //
-void CLight :: KeyValue( KeyValueData* pkvd)
+extern int gmsgLightStyle;
+void CLight::SendInitMessage(CBasePlayer* player)
+{
+	char szPattern[64];
+	memset(szPattern, 0, sizeof(szPattern));
+
+	if (m_iStyle >= 32)
+	{
+		if (FBitSet(pev->spawnflags, SF_LIGHT_START_OFF))
+			strcpy(szPattern, "a");
+		else if (m_iszPattern)
+			strcpy(szPattern, (char*)STRING(m_iszPattern));
+		else
+			strcpy(szPattern, "m");
+
+		if (player)
+			MESSAGE_BEGIN(MSG_ONE, gmsgLightStyle, NULL, player->pev);
+		else
+			MESSAGE_BEGIN(MSG_ALL, gmsgLightStyle, NULL);
+
+		WRITE_BYTE(m_iStyle);
+		WRITE_STRING(szPattern);
+		MESSAGE_END();
+	}
+
+	m_bAlreadySent = TRUE;
+}
+void CLight::KeyValue(KeyValueData* pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "style"))
 	{
@@ -70,66 +101,46 @@ void CLight :: KeyValue( KeyValueData* pkvd)
 	}
 	else if (FStrEq(pkvd->szKeyName, "pattern"))
 	{
-		m_iszPattern = ALLOC_STRING( pkvd->szValue );
+		m_iszPattern = ALLOC_STRING(pkvd->szValue);
 		pkvd->fHandled = TRUE;
 	}
 	else
 	{
-		CPointEntity::KeyValue( pkvd );
+		CPointEntity::KeyValue(pkvd);
 	}
 }
-
-/*QUAKED light (0 1 0) (-8 -8 -8) (8 8 8) LIGHT_START_OFF
-Non-displayed light.
-Default light value is 300
-Default style is 0
-If targeted, it will toggle between on or off.
-*/
-
-void CLight :: Spawn()
+void CLight::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	if (FStringNull(pev->targetname))
-	{       // inert light
-		REMOVE_ENTITY(ENT(pev));
-		return;
-	}
-	
+	char szPattern[64];
+	memset(szPattern, 0, sizeof(szPattern));
+
 	if (m_iStyle >= 32)
 	{
-//		CHANGE_METHOD(ENT(pev), em_use, light_use);
-		if (FBitSet(pev->spawnflags, SF_LIGHT_START_OFF))
-			LIGHT_STYLE(m_iStyle, "a");
-		else if (m_iszPattern)
-			LIGHT_STYLE(m_iStyle, (char *)STRING( m_iszPattern ));
-		else
-			LIGHT_STYLE(m_iStyle, "m");
-	}
-}
-
-
-void CLight :: Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
-{
-	if (m_iStyle >= 32)
-	{
-		if ( !ShouldToggle( useType, !FBitSet(pev->spawnflags, SF_LIGHT_START_OFF) ) )
+		if (!ShouldToggle(useType, !FBitSet(pev->spawnflags, SF_LIGHT_START_OFF)))
 			return;
 
 		if (FBitSet(pev->spawnflags, SF_LIGHT_START_OFF))
 		{
 			if (m_iszPattern)
-				LIGHT_STYLE(m_iStyle, (char *)STRING( m_iszPattern ));
+				strcpy(szPattern, (char*)STRING(m_iszPattern));
 			else
-				LIGHT_STYLE(m_iStyle, "m");
+				strcpy(szPattern, "m");
 			ClearBits(pev->spawnflags, SF_LIGHT_START_OFF);
 		}
 		else
 		{
-			LIGHT_STYLE(m_iStyle, "a");
+			strcpy(szPattern, "a");
 			SetBits(pev->spawnflags, SF_LIGHT_START_OFF);
 		}
 	}
-}
 
+	MESSAGE_BEGIN(MSG_ALL, gmsgLightStyle, NULL);
+	WRITE_BYTE(m_iStyle);
+	WRITE_STRING(szPattern);
+	MESSAGE_END();
+	LIGHT_STYLE(m_iStyle, szPattern);
+}
+//RENDERERS END
 //
 // shut up spawn functions for new spotlights
 //

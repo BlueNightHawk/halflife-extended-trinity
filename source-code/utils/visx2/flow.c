@@ -77,7 +77,7 @@ winding_t	*ChopWinding (winding_t *in, pstack_t *stack, plane_t *split)
 	vec_t	dot;
 	int		i, j;
 	vec_t	*p1, *p2;
-	vec3_t	mid;
+	Vector	mid;
 	winding_t	*neww;
 	int		maxpts;
 
@@ -190,10 +190,10 @@ int
 InTheBallpark( winding_t *start, winding_t *clip, winding_t *end )
 {
 	int			d,p;
-	vec3_t		bmin = {9999,9999,9999}, bmax = {-9999,-9999,-9999};
-	vec3_t		cmin = {9999,9999,9999}, cmax = {-9999,-9999,-9999};
-	vec3_t		bcenter, bsize;
-	vec3_t		ccenter, csize;
+	Vector		bmin = {9999,9999,9999}, bmax = {-9999,-9999,-9999};
+	Vector		cmin = {9999,9999,9999}, cmax = {-9999,-9999,-9999};
+	Vector		bcenter, bsize;
+	Vector		ccenter, csize;
 
 
 	for(d=0; d<3; d++)
@@ -257,7 +257,7 @@ winding_t	*ClipToSeperators (winding_t *source, winding_t *pass, winding_t *targ
 {
 	int			i, j, k, l;
 	plane_t		plane;
-	vec3_t		v1, v2;
+	Vector		v1, v2;
 	float		d;
 	vec_t		length;
 	int			counts[3];

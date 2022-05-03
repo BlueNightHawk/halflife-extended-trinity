@@ -16,11 +16,11 @@
 
 #include "csg.h"
 
-// can't use the glvertex3fv functions, because the vec3_t fields
+// can't use the glvertex3fv functions, because the Vector fields
 // could be either floats or doubles, depending on DOUBLEVEC_T
 
 qboolean	drawflag;
-vec3_t	draw_mins, draw_maxs;
+Vector	draw_mins, draw_maxs;
 
 
 #define	WIN_SIZE	512

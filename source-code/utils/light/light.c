@@ -24,7 +24,7 @@ byte		*filebase, *file_p, *file_end;
 
 dmodel_t	*bspmodel;
 
-vec3_t	bsp_origin;
+Vector	bsp_origin;
 
 qboolean	extrasamples;
 qboolean hicolor;

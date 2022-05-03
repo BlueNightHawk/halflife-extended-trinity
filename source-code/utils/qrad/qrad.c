@@ -26,9 +26,9 @@ patch_t		*face_patches[MAX_MAP_FACES];
 entity_t	*face_entity[MAX_MAP_FACES];
 patch_t		patches[MAX_PATCHES];
 unsigned	num_patches;
-vec3_t		emitlight[MAX_PATCHES];
-vec3_t		addlight[MAX_PATCHES];
-vec3_t		face_offset[MAX_MAP_FACES];		// for rotating bmodels
+Vector		emitlight[MAX_PATCHES];
+Vector		addlight[MAX_PATCHES];
+Vector		face_offset[MAX_MAP_FACES];		// for rotating bmodels
 dplane_t	backplanes[MAX_MAP_PLANES];
 
 unsigned	numbounce = 1; // 3; /* Originally this was 8 */
@@ -37,11 +37,11 @@ float		maxchop = 64;
 float		minchop = 64;
 qboolean	dumppatches;
 
-int TestLine (vec3_t start, vec3_t stop);
+int TestLine (Vector start, Vector stop);
 
 int			junk;
 
-vec3_t		ambient = { 0, 0, 0 };
+Vector		ambient = { 0, 0, 0 };
 float		maxlight = 256; // 196  /* Originally this was 196 */
 
 float		lightscale = 1.0;
@@ -128,7 +128,7 @@ void MakeParents (int nodenum, int parent)
 typedef struct
 {
 	char	name[256];
-	vec3_t	value;
+	Vector	value;
 	char	*filename;
 } texlight_t;
 
@@ -226,7 +226,7 @@ void ReadLightFile (char *filename)
 LightForTexture
 ============
 */
-void LightForTexture( char *name, vec3_t result )
+void LightForTexture( char *name, Vector result )
 {
 	int		i;
 
@@ -288,7 +288,7 @@ winding_t	*WindingFromFace (dface_t *f)
 BaseLightForFace
 =============
 */
-void BaseLightForFace( dface_t *f, vec3_t light, vec3_t reflectivity )
+void BaseLightForFace( dface_t *f, Vector light, Vector reflectivity )
 {
 	texinfo_t	*tx;
 	miptex_t	*mt;
@@ -358,8 +358,8 @@ void MakePatchForFace (int fn, winding_t *w)
 	{
 		float	area;
 		patch_t		*patch;
-		vec3_t light;
-		vec3_t		centroid = {0,0,0};
+		Vector light;
+		Vector		centroid = {0,0,0};
 		int			i, j;
 		texinfo_t	*tx = &texinfo[f->texinfo];
 
@@ -478,7 +478,7 @@ void MakePatches (void)
 	int		fn;
 	winding_t	*w;
 	dmodel_t	*mod;
-	vec3_t		origin;
+	Vector		origin;
 	entity_t	*ent;
 	char		*s;
 
@@ -538,8 +538,8 @@ SubdividePatch
 void	SubdividePatch (patch_t *patch)
 {
 	winding_t *w, *o1, *o2;
-	vec3_t	total;
-	vec3_t	split;
+	Vector	total;
+	Vector	split;
 	vec_t	dist;
 	vec_t	widest = -1;
 	int		i, j, widest_axis = -1;
@@ -690,14 +690,14 @@ void MakeScales (int threadnum)
 {
 	int		i;
 	unsigned j;
-	vec3_t	delta;
+	Vector	delta;
 	vec_t	dist, scale;
 	int		count;
 	float	trans;
 	patch_t		*patch, *patch2;
 	float		total, send;
 	dplane_t	plane;
-	vec3_t		origin;
+	Vector		origin;
 	vec_t		area;
 	transfer_t	transfers[MAX_PATCHES], *all_transfers;
 
@@ -919,7 +919,7 @@ void SwapTransfersTask (int patchnum)
 CollectLight
 =============
 */
-void CollectLight( vec3_t total )
+void CollectLight( Vector total )
 {
 	unsigned i;
 	patch_t	*patch;
@@ -959,7 +959,7 @@ void GatherLight (int threadnum)
 	transfer_t	*trans;
 	int			num;
 	patch_t		*patch;
-	vec3_t		sum, v;
+	Vector		sum, v;
 
 	while (1)
 	{
@@ -992,7 +992,7 @@ BounceLight
 void BounceLight (void)
 {
 	unsigned i;
-	vec3_t	added;
+	Vector	added;
 	char	name[64];
 
 	for (i=0 ; i<num_patches ; i++)

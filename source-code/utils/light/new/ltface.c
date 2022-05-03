@@ -8,7 +8,7 @@ CastRay
 Returns the distance between the points, or -1 if blocked
 =============
 */
-vec_t CastRay (vec3_t p1, vec3_t p2)
+vec_t CastRay (Vector p1, Vector p2)
 {
 	int		i;
 	vec_t	t;
@@ -57,14 +57,14 @@ typedef struct
 	int		numlightstyles;
 	vec_t	*light;
 	vec_t	facedist;
-	vec3_t	facenormal;
+	Vector	facenormal;
 
 	int		numsurfpt;
-	vec3_t	surfpt[SINGLEMAP];
+	Vector	surfpt[SINGLEMAP];
 
-	vec3_t	texorg;
-	vec3_t	worldtotex[2];	// s = (world - texorg) . worldtotex[0]
-	vec3_t	textoworld[2];	// world = texorg + s * textoworld[0]
+	Vector	texorg;
+	Vector	worldtotex[2];	// s = (world - texorg) . worldtotex[0]
+	Vector	textoworld[2];	// world = texorg + s * textoworld[0]
 
 	vec_t	exactmins[2], exactmaxs[2];
 	
@@ -86,7 +86,7 @@ void CalcFaceVectors (lightinfo_t *l)
 {
 	texinfo_t	*tex;
 	int			i, j;
-	vec3_t	texnormal;
+	Vector	texnormal;
 	float	distscale;
 	vec_t	dist, len;
 
@@ -218,7 +218,7 @@ void CalcPoints (lightinfo_t *l)
 	vec_t	starts, startt, us, ut;
 	vec_t	*surf;
 	vec_t	mids, midt;
-	vec3_t	facemid, move;
+	Vector	facemid, move;
 
 //
 // fill in surforg
@@ -329,7 +329,7 @@ SingleLightFace
 void SingleLightFace (lightentity_t *light, lightinfo_t *l)
 {
 	vec_t	dist;
-	vec3_t	incoming;
+	Vector	incoming;
 	vec_t	angle;
 	vec_t	add;
 	vec_t	*surf;
@@ -337,8 +337,8 @@ void SingleLightFace (lightentity_t *light, lightinfo_t *l)
 	int		mapnum;
 	int		size;
 	int		c, i;
-	vec3_t	rel;
-	vec3_t	spotvec;
+	Vector	rel;
+	Vector	spotvec;
 	vec_t	falloff;
 	vec_t	*lightsamp;
 	

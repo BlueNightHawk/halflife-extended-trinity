@@ -24,7 +24,7 @@ int g_nMapFileVersion;
 textureAxisFromPlane
 ==================
 */
-vec3_t	baseaxis[18] =
+Vector	baseaxis[18] =
 {
 	{0,0,1}, {1,0,0}, {0,-1,0},			// floor
 	{0,0,-1}, {1,0,0}, {0,-1,0},		// ceiling
@@ -34,7 +34,7 @@ vec3_t	baseaxis[18] =
 	{0,-1,0}, {1,0,0}, {0,0,-1}			// north wall
 };
 
-void TextureAxisFromPlane(plane_t *pln, vec3_t xv, vec3_t yv)
+void TextureAxisFromPlane(plane_t *pln, Vector xv, Vector yv)
 {
 	int		bestaxis;
 	vec_t	dot,best;
@@ -68,7 +68,7 @@ void ParseBrush (entity_t *mapent)
 	brush_t		*b;
 	bface_t		*f, *f2;
 	int			planepts[3][3];
-	vec3_t			t1, t2, t3;
+	Vector			t1, t2, t3;
 	int			i,j;
 	vec_t		d;
 	int			planenum;
@@ -202,7 +202,7 @@ void ParseBrush (entity_t *mapent)
 	if (contents == CONTENTS_ORIGIN)
 	{
 		char	string[32];
-		vec3_t	origin;
+		Vector	origin;
 
 		b->contents = CONTENTS_SOLID;
 		CreateBrush (mapent->firstbrush + b->brushnum);	// to get sizes

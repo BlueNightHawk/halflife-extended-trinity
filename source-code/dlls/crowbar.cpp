@@ -140,7 +140,7 @@ void CCrowbar::PrimaryAttack()
 
 void CCrowbar::Smack( )
 {
-	DecalGunshot( &m_trHit, BULLET_PLAYER_CROWBAR );
+	return;
 }
 
 
@@ -297,7 +297,9 @@ int CCrowbar::Swing( int fFirst )
 		SetThink( &CCrowbar::Smack );
 		pev->nextthink = gpGlobals->time + 0.2;
 
-		
+		//RENDERERS START
+		DecalGunshot(&m_trHit, BULLET_PLAYER_CROWBAR, vecSrc, vecEnd);
+		//RENDERERS END
 	}
 	return fDidHit;
 }

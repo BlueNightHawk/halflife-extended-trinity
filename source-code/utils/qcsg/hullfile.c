@@ -10,7 +10,7 @@
 
 #include "csg.h"
 
-extern vec3_t	hull_size[NUM_HULLS][2];
+extern Vector	hull_size[NUM_HULLS][2];
 /*
 ============
 CheckHullFile
@@ -20,7 +20,7 @@ void CheckHullFile( qboolean hullfile, char *filename )
 {
 	FILE *f;
 	char scan[ 128 ];
-	vec3_t	new_hulls[NUM_HULLS][2];
+	Vector	new_hulls[NUM_HULLS][2];
 	qboolean read_error = false;
 	int i;
 
@@ -43,7 +43,7 @@ void CheckHullFile( qboolean hullfile, char *filename )
 	{
 		float x1, y1, z1, x2, y2, z2;
 
-		vec3_t mins, maxs;
+		Vector mins, maxs;
 		int	argCnt;
 
 		if ( !fgets(scan, sizeof(scan), f ) )
@@ -80,7 +80,7 @@ void CheckHullFile( qboolean hullfile, char *filename )
 	}
 	else
 	{
-		memcpy( hull_size, new_hulls, 2 * NUM_HULLS * sizeof( vec3_t ) );
+		memcpy( hull_size, new_hulls, 2 * NUM_HULLS * sizeof( Vector ) );
 	}
 
 	fclose( f );

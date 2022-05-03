@@ -22,8 +22,8 @@ typedef struct wvert_s
 typedef struct wedge_s
 {
 	struct wedge_s *next;
-	vec3_t	dir;
-	vec3_t	origin;
+	Vector	dir;
+	Vector	origin;
 	wvert_t	head;
 } wedge_t;
 
@@ -53,11 +53,11 @@ void PrintFace (face_t *f)
 
 wedge_t	*wedge_hash[NUM_HASH];
 
-static	vec3_t	hash_min, hash_scale;
+static	Vector	hash_min, hash_scale;
 
-static	void InitHash (vec3_t mins, vec3_t maxs)
+static	void InitHash (Vector mins, Vector maxs)
 {
-	vec3_t	size;
+	Vector	size;
 	vec_t	volume;
 	vec_t	scale;
 	int		newsize[2];
@@ -78,7 +78,7 @@ static	void InitHash (vec3_t mins, vec3_t maxs)
 	hash_scale[2] = newsize[1];
 }
 
-static	unsigned HashVec (vec3_t vec)
+static	unsigned HashVec (Vector vec)
 {
 	unsigned	h;
 
@@ -91,7 +91,7 @@ static	unsigned HashVec (vec3_t vec)
 
 //============================================================================
 
-void CanonicalVector (vec3_t vec)
+void CanonicalVector (Vector vec)
 {
 	VectorNormalize (vec);
 	if (vec[0] > 0 /* EQUAL_EPSILON */)
@@ -126,10 +126,10 @@ void CanonicalVector (vec3_t vec)
 	printf ("WARNING: CanonicalVector: degenerate\n");
 }
 
-wedge_t	*FindEdge (vec3_t p1, vec3_t p2, vec_t *t1, vec_t *t2)
+wedge_t	*FindEdge (Vector p1, Vector p2, vec_t *t1, vec_t *t2)
 {
-	vec3_t	origin;
-	vec3_t	dir;
+	Vector	origin;
+	Vector	dir;
 	wedge_t	*w;
 	vec_t	temp;
 	int		h;
@@ -236,7 +236,7 @@ AddEdge
 
 ===============
 */
-void AddEdge (vec3_t p1, vec3_t p2)
+void AddEdge (Vector p1, Vector p2)
 {
 	wedge_t	*w;
 	vec_t	t1, t2;
@@ -269,7 +269,7 @@ void AddFaceEdges (face_t *f)
 // a specially allocated face that can hold hundreds of edges if needed
 byte	superfacebuf[8192];
 face_t	*superface = (face_t *)superfacebuf;
-int		MAXSUPERFACEEDGES = ( sizeof(superfacebuf)-sizeof(face_t)+sizeof(superface->pts)) / sizeof(vec3_t);
+int		MAXSUPERFACEEDGES = ( sizeof(superfacebuf)-sizeof(face_t)+sizeof(superface->pts)) / sizeof(Vector);
 
 void FixFaceEdges (face_t *f);
 
@@ -279,7 +279,7 @@ void SplitFaceForTjunc (face_t *f, face_t *original)
 {
 	int			i;
 	face_t		*new, *chain;
-	vec3_t		dir, test;
+	Vector		dir, test;
 	vec_t		v;
 	int			firstcorner, lastcorner;
 	
@@ -478,7 +478,7 @@ tjunc
 */
 void tjunc (node_t *headnode)
 {
-	vec3_t	maxs, mins;
+	Vector	maxs, mins;
 	int		i;
 	
 	qprintf ("---- tjunc ----\n");

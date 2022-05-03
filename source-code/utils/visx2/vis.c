@@ -43,7 +43,7 @@ qboolean		verbose;
 
 void PlaneFromWinding (winding_t *w, plane_t *plane)
 {
-	vec3_t		v1, v2;
+	Vector		v1, v2;
 
 // calc plane
 	VectorSubtract (w->points[2], w->points[1], v1);

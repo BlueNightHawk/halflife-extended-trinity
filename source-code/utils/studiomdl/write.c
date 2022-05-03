@@ -382,10 +382,10 @@ void WriteModel( )
 
 	mstudiobodyparts_t	*pbodypart;
 	mstudiomodel_t	*pmodel;
-	// vec3_t			*bbox;
+	// Vector			*bbox;
 	byte			*pbone;
-	vec3_t			*pvert;
-	vec3_t			*pnorm;
+	Vector			*pvert;
+	Vector			*pnorm;
 	mstudiomesh_t	*pmesh;
 	s_trianglevert_t *psrctri;
 	int				cur;
@@ -458,13 +458,13 @@ void WriteModel( )
 		pData = pbone;
 
 		// save group info
-		pvert = (vec3_t *)pData;
-		pData += model[i]->numverts * sizeof( vec3_t );
+		pvert = (Vector *)pData;
+		pData += model[i]->numverts * sizeof( Vector );
 		pmodel[i].vertindex		= ((byte *)pvert - pStart); 
 		ALIGN( pData );			
 
-		pnorm = (vec3_t *)pData;
-		pData += model[i]->numnorms * sizeof( vec3_t );
+		pnorm = (Vector *)pData;
+		pData += model[i]->numnorms * sizeof( Vector );
 		pmodel[i].normindex		= ((byte *)pnorm - pStart); 
 		ALIGN( pData );
 

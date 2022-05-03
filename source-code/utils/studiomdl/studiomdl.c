@@ -40,7 +40,7 @@ static int force_powerof2_textures = 0;
 
 void Sys_Error (char *error, ...) {};
 
-void clip_rotations( vec3_t rot );
+void clip_rotations( Vector rot );
 
 #define strcpyn( a, b ) strncpy( a, b, sizeof( a ) )
 
@@ -89,8 +89,8 @@ void ExtractMotion( )
 		{
 			// assume 0 for now.
 			int					type;
-			vec3_t				*ppos;
-			vec3_t				motion = { 0,0,0};
+			Vector				*ppos;
+			Vector				motion = { 0,0,0};
 			type = sequence[i].motiontype;
 			ppos = sequence[i].panim[0]->pos[0];
 
@@ -106,7 +106,7 @@ void ExtractMotion( )
 			// printf("%f %f %f\n", motion[0], motion[1], motion[2] );
 			for (j = 0; j < sequence[i].numframes; j++)
 			{	
-				vec3_t	adj;
+				Vector	adj;
 				for (k = 0; k < sequence[i].panim[0]->numbones; k++)
 				{
 					if (sequence[i].panim[0]->node[k].parent == -1)
@@ -179,10 +179,10 @@ void ExtractMotion( )
 	{
 		// assume 0 for now.
 		int					type;
-		vec3_t				*ppos;
-		vec3_t				*prot;
-		vec3_t				motion = { 0,0,0};
-		vec3_t				angles = { 0,0,0};
+		Vector				*ppos;
+		Vector				*prot;
+		Vector				motion = { 0,0,0};
+		Vector				angles = { 0,0,0};
 
 		type = sequence[i].motiontype;
 		// printf("%f %f %f\n", motion[0], motion[1], motion[2] );
@@ -243,8 +243,8 @@ void OptimizeAnimations(void)
 			{
 				for (q = 0; q < sequence[i].numblends; q++)
 				{
-					vec3_t				*ppos = sequence[i].panim[q]->pos[j];
-					vec3_t				*prot = sequence[i].panim[q]->rot[j];
+					Vector				*ppos = sequence[i].panim[q]->pos[j];
+					Vector				*prot = sequence[i].panim[q]->rot[j];
 
 					n = 0; // sequence[i].panim[q]->startframe;
 					m = sequence[i].numframes - 1; // sequence[i].panim[q]->endframe;
@@ -382,8 +382,8 @@ void SimplifyModel (void)
 {
 	int i, j, k;
 	int n, m, q;
-	vec3_t			*defaultpos[MAXSTUDIOSRCBONES];
-	vec3_t			*defaultrot[MAXSTUDIOSRCBONES];
+	Vector			*defaultpos[MAXSTUDIOSRCBONES];
+	Vector			*defaultrot[MAXSTUDIOSRCBONES];
 	int				iError = 0;
 
 	OptimizeAnimations( );
@@ -458,8 +458,8 @@ void SimplifyModel (void)
 					bonetable[k].bonecontroller	= 0;
 					bonetable[k].flags		= 0;
 					// set defaults
-					defaultpos[k] = kalloc( MAXSTUDIOANIMATIONS, sizeof( vec3_t ) );
-					defaultrot[k] = kalloc( MAXSTUDIOANIMATIONS, sizeof( vec3_t ) );
+					defaultpos[k] = kalloc( MAXSTUDIOANIMATIONS, sizeof( Vector ) );
+					defaultrot[k] = kalloc( MAXSTUDIOANIMATIONS, sizeof( Vector ) );
 					for (n = 0; n < MAXSTUDIOANIMATIONS; n++)
 					{
 						VectorCopy( model[i]->skeleton[j].pos, defaultpos[k][n] );
@@ -654,7 +654,7 @@ void SimplifyModel (void)
 		// try all the connect vertices
 		for (i = 0; i < nummodels; i++)
 		{
-			vec3_t	p;
+			Vector	p;
 			for (j = 0; j < model[i]->numverts; j++)
 			{
 				VectorCopy( model[i]->vert[j].org, p );
@@ -726,8 +726,8 @@ void SimplifyModel (void)
 	// relink animations
 	for (i = 0; i < numseq; i++)
 	{
-		vec3_t			*origpos[MAXSTUDIOSRCBONES];
-		vec3_t			*origrot[MAXSTUDIOSRCBONES];
+		Vector			*origpos[MAXSTUDIOSRCBONES];
+		Vector			*origrot[MAXSTUDIOSRCBONES];
 
 		for (q = 0; q < sequence[i].numblends; q++)
 		{
@@ -843,7 +843,7 @@ void SimplifyModel (void)
 	// find bounding box for each sequence
 	for (i = 0; i < numseq; i++)
 	{
-		vec3_t bmin, bmax;
+		Vector bmin, bmax;
 
 		// find intersection box volume for each bone
 		for (j = 0; j < 3; j++)
@@ -858,11 +858,11 @@ void SimplifyModel (void)
 			{
 				float bonetransform[MAXSTUDIOBONES][3][4];	// bone transformation matrix
 				float bonematrix[3][4];						// local transformation matrix
-				vec3_t pos;
+				Vector pos;
 
 				for (j = 0; j < numbones; j++)
 				{
-					vec3_t angle;
+					Vector angle;
 
 					// convert to degrees
 					angle[0]	= sequence[i].panim[q]->rot[j][n][0] * (180.0 / Q_PI);
@@ -1724,7 +1724,7 @@ void Build_Reference( s_model_t *pmodel)
 	for (i = 0; i < pmodel->numbones; i++)
 	{
 		float m[3][4];
-		vec3_t p;
+		Vector p;
 
 		// convert to degrees
 		angle[0] = pmodel->skeleton[i].rot[0] * (180.0 / Q_PI);
@@ -1767,7 +1767,7 @@ void Grab_Triangles( s_model_t *pmodel )
 	int		i, j;
 	int		tcount = 0;	
 	int		ncount = 0;
-	vec3_t	vmin, vmax;
+	Vector	vmin, vmax;
 
 	vmin[0] = vmin[1] = vmin[2] = 99999;
 	vmax[0] = vmax[1] = vmax[2] = -99999;
@@ -1786,8 +1786,8 @@ void Grab_Triangles( s_model_t *pmodel )
 			s_trianglevert_t	*ptriv;
 			int bone;
 
-			vec3_t vert[3];
-			vec3_t norm[3];
+			Vector vert[3];
+			Vector norm[3];
 
 			linecount++;
 
@@ -1838,7 +1838,7 @@ void Grab_Triangles( s_model_t *pmodel )
 				if (fgets( line, sizeof( line ), input ) != NULL) 
 				{
 					s_vertex_t p;
-					vec3_t tmp;
+					Vector tmp;
 					s_normal_t normal;
 
 					linecount++;
@@ -1920,7 +1920,7 @@ void Grab_Triangles( s_model_t *pmodel )
 				} 
 				else 
 				{
-					vec3_t a1, a2, sn;
+					Vector a1, a2, sn;
 					float x, y, z;
 
 					VectorSubtract( vert[1], vert[0], a1 );
@@ -2110,7 +2110,7 @@ void Grab_Studio ( s_model_t *pmodel )
 
 
 
-void clip_rotations( vec3_t rot )
+void clip_rotations( Vector rot )
 {
 	int j;
 	// clip everything to : -Q_PI <= x < Q_PI
@@ -2287,8 +2287,8 @@ void Cmd_Body( )
 
 void Grab_Animation( s_animation_t *panim)
 {
-	vec3_t pos;
-	vec3_t rot;
+	Vector pos;
+	Vector rot;
 	char cmd[1024];
 	int index;
 	int	t = -99999999;
@@ -2298,8 +2298,8 @@ void Grab_Animation( s_animation_t *panim)
 
 	for (index = 0; index < panim->numbones; index++) 
 	{
-		panim->pos[index] = kalloc( MAXSTUDIOANIMATIONS, sizeof( vec3_t ) );
-		panim->rot[index] = kalloc( MAXSTUDIOANIMATIONS, sizeof( vec3_t ) );
+		panim->pos[index] = kalloc( MAXSTUDIOANIMATIONS, sizeof( Vector ) );
+		panim->rot[index] = kalloc( MAXSTUDIOANIMATIONS, sizeof( Vector ) );
 	}
 
 	cz = cos( zrotation );
@@ -2371,14 +2371,14 @@ void Shift_Animation( s_animation_t *panim)
 
 	int size;
 
-	size = (panim->endframe - panim->startframe + 1) * sizeof( vec3_t );
+	size = (panim->endframe - panim->startframe + 1) * sizeof( Vector );
 	// shift
 	for (j = 0; j < panim->numbones; j++)
 	{
-		vec3_t *ppos;
-		vec3_t *prot;
+		Vector *ppos;
+		Vector *prot;
 
-		k_memtotal -= MAXSTUDIOANIMATIONS * sizeof( vec3_t ) * 2;
+		k_memtotal -= MAXSTUDIOANIMATIONS * sizeof( Vector ) * 2;
 		k_memtotal += size * 2;
 
 		ppos = kalloc( 1, size );

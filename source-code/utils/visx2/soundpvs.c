@@ -25,7 +25,7 @@ SurfaceBBox
 
 ====================
 */
-void SurfaceBBox (dface_t *s, vec3_t mins, vec3_t maxs)
+void SurfaceBBox (dface_t *s, Vector mins, Vector maxs)
 {
 	int		i, j;
 	int		e;
@@ -67,7 +67,7 @@ void CalcAmbientSounds (void)
 	dleaf_t	*leaf, *hit;
 	byte	*vis;
 	dface_t	*surf;
-	vec3_t	mins, maxs;
+	Vector	mins, maxs;
 	float	d, maxd;
 	int		ambient_type;
 	texinfo_t	*info;

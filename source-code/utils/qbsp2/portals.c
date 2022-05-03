@@ -95,9 +95,9 @@ MakeHeadnodePortals
 The created portals will face the global outside_node
 ================
 */
-void MakeHeadnodePortals (node_t *node, vec3_t mins, vec3_t maxs)
+void MakeHeadnodePortals (node_t *node, Vector mins, Vector maxs)
 {
-	vec3_t		bounds[2];
+	Vector		bounds[2];
 	int			i, j, n;
 	portal_t	*p, *portals[6];
 	dplane_t	bplanes[6], *pl;
@@ -173,7 +173,7 @@ void CheckWindingArea (winding_t *w)
 {
 	int		i;
 	float	total, add;
-	vec3_t	v1, v2, cross;
+	Vector	v1, v2, cross;
 	
 	total = 0;
 	for (i=1 ; i<w->numpoints ; i++)
@@ -191,8 +191,8 @@ void CheckWindingArea (winding_t *w)
 
 void PlaneFromWinding (winding_t *w, dplane_t *plane)
 {
-	vec3_t		v1, v2;
-	vec3_t		plane_normal;
+	Vector		v1, v2;
+	Vector		plane_normal;
 
 // calc plane
 	VectorSubtract (w->points[2], w->points[1], v1);

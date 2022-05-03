@@ -17,7 +17,7 @@ CastRay
 Returns the distance between the points, or -1 if blocked
 =============
 */
-vec_t CastRay (vec3_t p1, vec3_t p2)
+vec_t CastRay (Vector p1, Vector p2)
 {
 	int		i;
 	vec_t	t;
@@ -62,18 +62,18 @@ towards the center until it is valid.
 
 typedef struct
 {
-	vec3_t	lightmaps[MAXLIGHTMAPS][SINGLEMAP];
+	Vector	lightmaps[MAXLIGHTMAPS][SINGLEMAP];
 	int		numlightstyles;
 	vec_t	*light;
 	vec_t	facedist;
-	vec3_t	facenormal;
+	Vector	facenormal;
 
 	int		numsurfpt;
-	vec3_t	surfpt[SINGLEMAP];
+	Vector	surfpt[SINGLEMAP];
 
-	vec3_t	texorg;
-	vec3_t	worldtotex[2];	// s = (world - texorg) . worldtotex[0]
-	vec3_t	textoworld[2];	// world = texorg + s * textoworld[0]
+	Vector	texorg;
+	Vector	worldtotex[2];	// s = (world - texorg) . worldtotex[0]
+	Vector	textoworld[2];	// world = texorg + s * textoworld[0]
 
 	vec_t	exactmins[2], exactmaxs[2];
 	
@@ -95,7 +95,7 @@ void CalcFaceVectors (lightinfo_t *l)
 {
 	texinfo_t	*tex;
 	int			i, j;
-	vec3_t	texnormal;
+	Vector	texnormal;
 	float	distscale;
 	vec_t	dist, len;
 
@@ -227,7 +227,7 @@ void CalcPoints (lightinfo_t *l)
 	vec_t	starts, startt, us, ut;
 	vec_t	*surf;
 	vec_t	mids, midt;
-	vec3_t	facemid, move;
+	Vector	facemid, move;
 
 //
 // fill in surforg
@@ -338,7 +338,7 @@ SingleLightFace
 void SingleLightFace (lightentity_t *light, lightinfo_t *l)
 {
 	vec_t	dist;
-	vec3_t	incoming;
+	Vector	incoming;
 	vec_t	angle;
 	vec_t	add;
 	vec_t	*surf;
@@ -346,10 +346,10 @@ void SingleLightFace (lightentity_t *light, lightinfo_t *l)
 	int		mapnum;
 	int		size;
 	int		c, i;
-	vec3_t	rel;
-	vec3_t	spotvec;
+	Vector	rel;
+	Vector	spotvec;
 	vec_t	falloff;
-	vec3_t	*lightsamp;
+	Vector	*lightsamp;
 	float	intensity;
 	
 	VectorSubtract (light->origin, bsp_origin, rel);
@@ -510,11 +510,11 @@ void LightFace (int surfnum)
 	lightinfo_t	l;
 	int		s, t;
 	int		i,j,c;
-	vec3_t	total;
+	Vector	total;
 	int		size;
 	int		lightmapwidth, lightmapsize;
 	byte	*out;
-	vec3_t	*light;
+	Vector	*light;
 	int		w, h;
 	int		clamp = 192;
 	float	clampfactor = 0.75;
@@ -636,7 +636,7 @@ void LightFace (int surfnum)
 						{
 							if ( s+u-2>=0 && t+v-1>=0 && s+u-1 <= w && t+v-1 <= h)
 								{
-									vec3_t	sample;
+									Vector	sample;
 									VectorScale( light[((t*2)+(v-1))*w + ((s*2)+(u-1))], weight[u][v], sample );
 									divisor += weight[u][v];
 									VectorAdd( total, sample, total );

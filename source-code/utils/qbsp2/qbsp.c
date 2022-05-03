@@ -46,9 +46,9 @@ winding_t *BaseWindingForPlane (dplane_t *p)
 {
 	int		i, x;
 	vec_t	max, v;
-	vec3_t	org, vright, vup;
+	Vector	org, vright, vup;
 	winding_t	*w;
-	vec3_t	temp;
+	Vector	temp;
 
 #if 0
 // find the major axis
@@ -117,7 +117,7 @@ winding_t *BaseWindingForPlane (dplane_t *p)
 
 		VectorNormalize (vup);
 
-		VectorCopy (p->normal, temp);	// to vec3_t
+		VectorCopy (p->normal, temp);	// to Vector
 		CrossProduct (vup, temp, vright);
 
 		VectorScale (vup, 8192, vup);
@@ -183,7 +183,7 @@ winding_t *ClipWinding (winding_t *in, dplane_t *split, qboolean keepon)
 	vec_t	dot;
 	int		i, j;
 	vec_t	*p1, *p2;
-	vec3_t	mid;
+	Vector	mid;
 	winding_t	*neww;
 	int		maxpts;
 	
@@ -293,7 +293,7 @@ void	DivideWinding (winding_t *in, dplane_t *split, winding_t **front, winding_t
 	vec_t	dot;
 	int		i, j;
 	vec_t	*p1, *p2;
-	vec3_t	mid;
+	Vector	mid;
 	winding_t	*f, *b;
 	int		maxpts;
 	
@@ -424,7 +424,7 @@ void SplitFaceTmp( face_t *in, dplane_t *split, face_t **front, face_t **back )
 	int		i, j;
 	face_t	*newf, *new2;
 	vec_t	*p1, *p2;
-	vec3_t	mid;
+	Vector	mid;
 	
 	if (in->numpoints < 0)
 		Error ("SplitFace: freed face");
@@ -689,7 +689,7 @@ face_t	*validfaces[MAX_MAP_PLANES];
 
 
 
-void AddFaceToBounds (face_t *f, vec3_t mins, vec3_t maxs)
+void AddFaceToBounds (face_t *f, Vector mins, Vector maxs)
 {
 	int		i;
 

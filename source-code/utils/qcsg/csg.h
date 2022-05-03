@@ -26,7 +26,7 @@
 
 typedef struct
 {
-	vec3_t	normal;
+	Vector	normal;
 	vec_t	dist;
 	int		type;
 	int		iorigin[3];
@@ -41,8 +41,8 @@ extern int g_nMapFileVersion;	// map file version * 100 (ie 201), zero for pre-W
 
 typedef struct
 {
-	vec3_t	UAxis;
-	vec3_t	VAxis;
+	Vector	UAxis;
+	Vector	VAxis;
 	vec_t	shift[2];
 	vec_t	rotate;
 	vec_t	scale[2];
@@ -64,13 +64,13 @@ typedef struct bface_s
 	int			texinfo;
 	qboolean	used;		// just for face counting
 	int			contents, backcontents;
-	vec3_t		mins, maxs;
+	Vector		mins, maxs;
 } bface_t;
 
 #define	NUM_HULLS	4	// no larger than MAX_MAP_HULLS
 typedef struct
 {
-	vec3_t	mins, maxs;
+	Vector	mins, maxs;
 	bface_t	*faces;
 } brushhull_t;
 
@@ -112,7 +112,7 @@ void 	LoadMapFile (char *filename);
 
 extern int nummiptex;
 void WriteMiptex (void);
-int TexinfoForBrushTexture (plane_t *plane, brush_texture_t *bt, vec3_t origin);
+int TexinfoForBrushTexture (plane_t *plane, brush_texture_t *bt, Vector origin);
 
 //=============================================================================
 
@@ -121,7 +121,7 @@ int TexinfoForBrushTexture (plane_t *plane, brush_texture_t *bt, vec3_t origin);
 void FindGCD (int *v);
 
 brush_t *Brush_LoadEntity (entity_t *ent, int hullnum);
-int	PlaneTypeForNormal (vec3_t normal);
+int	PlaneTypeForNormal (Vector normal);
 
 void CreateBrush (int brushnum);
 
@@ -136,7 +136,7 @@ extern qboolean	onlyents;
 
 // draw.c
 
-extern vec3_t	draw_mins, draw_maxs;
+extern Vector	draw_mins, draw_maxs;
 extern	qboolean	drawflag;
 
 void Draw_ClearWindow (void);

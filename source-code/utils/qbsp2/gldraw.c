@@ -15,13 +15,13 @@
 
 #include "bsp5.h"
 
-vec3_t	draw_mins, draw_maxs;
+Vector	draw_mins, draw_maxs;
 
 void Draw_ClearBounds (void)
 {
 }
 
-void Draw_AddToBounds (vec3_t v)
+void Draw_AddToBounds (Vector v)
 {
 }
 
@@ -132,7 +132,7 @@ void Draw_SetBlack (void)
 	glColor3f (0,0,0);
 }
 
-void DrawPoint (vec3_t v)
+void DrawPoint (Vector v)
 {
 }
 
@@ -154,7 +154,7 @@ void DrawWinding (winding_t *w)
 	glFlush ();
 }
 
-void DrawTri (vec3_t p1, vec3_t p2, vec3_t p3)
+void DrawTri (Vector p1, Vector p2, Vector p3)
 {
 }
 

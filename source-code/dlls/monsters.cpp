@@ -532,7 +532,7 @@ void CBaseMonster :: MonsterThink ()
 	pev->nextthink = gpGlobals->time + 0.1;// keep monster thinking.
 
 	
-	int fogEndDist = CEnvFog::GetCurrentEndDist();
+	int fogEndDist = 0;
 	if (fogEndDist > 0)
 	{
 		m_flDistTooFar = fogEndDist - 100;

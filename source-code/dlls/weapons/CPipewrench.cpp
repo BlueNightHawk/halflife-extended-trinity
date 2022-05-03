@@ -110,7 +110,7 @@ void CPipewrench::SecondaryAttack()
 
 void CPipewrench::Smack()
 {
-	DecalGunshot( &m_trHit, BULLET_PLAYER_CROWBAR );
+	return;
 }
 
 void CPipewrench::SwingAgain()
@@ -440,6 +440,10 @@ void CPipewrench::BigSwing()
 		m_flNextPrimaryAttack = GetNextAttackDelay(1.0);
 		m_flNextSecondaryAttack = GetNextAttackDelay(1.0);
 		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.0;
+
+		//RENDERERS START
+		DecalGunshot(&tr, BULLET_PLAYER_CROWBAR, vecSrc, vecEnd);
+		//RENDERERS END
 	}
 }
 

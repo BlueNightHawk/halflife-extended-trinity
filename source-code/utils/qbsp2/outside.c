@@ -21,7 +21,7 @@ int		c_keep_faces;
 PointInLeaf
 ===========
 */
-node_t	*PointInLeaf (node_t *node, vec3_t point)
+node_t	*PointInLeaf (node_t *node, Vector point)
 {
 	vec_t	d;
 	
@@ -41,7 +41,7 @@ node_t	*PointInLeaf (node_t *node, vec3_t point)
 PlaceOccupant
 ===========
 */
-qboolean PlaceOccupant (int num, vec3_t point, node_t *headnode)
+qboolean PlaceOccupant (int num, Vector point, node_t *headnode)
 {
 	node_t	*n;
 	
@@ -58,10 +58,10 @@ qboolean PlaceOccupant (int num, vec3_t point, node_t *headnode)
 WindingCenter
 =============
 */
-void	WindingCenter (winding_t *w, vec3_t center)
+void	WindingCenter (winding_t *w, Vector center)
 {
 	int		i;
-	vec3_t	d1, d2, cross;
+	Vector	d1, d2, cross;
 	float	scale;
 
 	VectorCopy (vec3_origin, center);
@@ -82,7 +82,7 @@ FILE	*pointfile, *linefile;
 void MarkLeakTrail (portal_t *n2)
 {
 	int		i, j;
-	vec3_t	p1, p2, dir;
+	Vector	p1, p2, dir;
 	float	len;
 	portal_t *n1;
 
@@ -292,7 +292,7 @@ node_t *FillOutside (node_t *node, qboolean leakfile)
 	int			i;
 	qboolean	inside;
 	qboolean	ret;
-	vec3_t		origin;
+	Vector		origin;
 	char		*cl;
 
 	qprintf ("----- FillOutside ----\n");

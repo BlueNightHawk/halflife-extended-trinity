@@ -13,13 +13,13 @@
 typedef struct
 {
 	dface_t		*faces[2];
-	vec3_t		interface_normal;
+	Vector		interface_normal;
 	qboolean	coplanar;
 } edgeshare_t;
 
 edgeshare_t	edgeshare[MAX_MAP_EDGES];
 
-vec3_t	face_centroids[MAX_MAP_EDGES];
+Vector	face_centroids[MAX_MAP_EDGES];
 
 #ifdef OBSOLETE_CODE
 
@@ -82,7 +82,7 @@ void PairEdges (void)
 				else if ( smoothing_threshold > 0 )
 				{
 					// see if they fall into a "smoothing group" based on angle of the normals
-					vec3_t	normals[2];
+					Vector	normals[2];
 					double	cos_normals_angle;
 					for(n=0; n<2; n++)
 					{
@@ -113,7 +113,7 @@ void PairEdges (void)
 typedef struct triedge_s
 {
 	int			p0, p1;
-	vec3_t		normal;
+	Vector		normal;
 	vec_t		dist;
 	struct triangle_s	*tri;
 } triedge_t;
@@ -188,8 +188,8 @@ void FreeTriangulation (triangulation_t *tr)
 triedge_t	*FindEdge (triangulation_t *trian, int p0, int p1)
 {
 	triedge_t	*e, *be;
-	vec3_t		v1;
-	vec3_t		normal;
+	Vector		v1;
+	Vector		normal;
 	vec_t		dist;
 
 	if (trian->edgematrix[p0][p1])
@@ -245,7 +245,7 @@ TriEdge_r
 void TriEdge_r (triangulation_t *trian, triedge_t *e)
 {
 	int		i, bestp;
-	vec3_t	v1, v2;
+	Vector	v1, v2;
 	vec_t	*p0, *p1, *p;
 	vec_t	best, ang;
 	triangle_t	*nt;
@@ -298,7 +298,7 @@ TriangulatePoints
 void TriangulatePoints (triangulation_t *trian)
 {
 	vec_t	d, bestd;
-	vec3_t	v1;
+	Vector	v1;
 	int		bp1, bp2, i, j;
 	vec_t	*p1, *p2;
 	triedge_t	*e, *e2;
@@ -352,10 +352,10 @@ void AddPatchToTriangulation (patch_t *patch, triangulation_t *trian)
 LerpTriangle
 ===============
 */
-void LerpTriangle (triangulation_t *trian, triangle_t *t, vec3_t point, vec3_t result)
+void LerpTriangle (triangulation_t *trian, triangle_t *t, Vector point, Vector result)
 {
 	patch_t		*p1, *p2, *p3;
-	vec3_t		base, d1, d2;
+	Vector		base, d1, d2;
 	vec_t		x, y, x1, y1, x2, y2;
 	int			i;
 
@@ -399,7 +399,7 @@ void LerpTriangle (triangulation_t *trian, triangle_t *t, vec3_t point, vec3_t r
 
 }
 
-qboolean PointInTriangle (vec3_t point, triangle_t *t)
+qboolean PointInTriangle (Vector point, triangle_t *t)
 {
 	int		i;
 	triedge_t	*e;
@@ -421,13 +421,13 @@ qboolean PointInTriangle (vec3_t point, triangle_t *t)
 SampleTriangulation
 ===============
 */
-void SampleTriangulation (vec3_t point, triangulation_t *trian, triangle_t **last_tri, vec3_t result)
+void SampleTriangulation (Vector point, triangulation_t *trian, triangle_t **last_tri, Vector result)
 {
 	triangle_t	*t;
 	triedge_t	*e;
 	vec_t		d, best;
 	patch_t		*p0, *p1;
-	vec3_t		v1, v2;
+	Vector		v1, v2;
 	int			i, j;
 
 	if (trian->numpoints == 0)
@@ -529,19 +529,19 @@ void SampleTriangulation (vec3_t point, triangulation_t *trian, triangle_t **las
 
 typedef struct
 {
-	vec3_t	lightmaps[MAXLIGHTMAPS][SINGLEMAP];
+	Vector	lightmaps[MAXLIGHTMAPS][SINGLEMAP];
 	int		numlightstyles;
 	vec_t	*light;
 	vec_t	facedist;
-	vec3_t	facenormal;
+	Vector	facenormal;
 
 	int		numsurfpt;
-	vec3_t	surfpt[SINGLEMAP];
-	vec3_t	facemid;		// world coordinates of center
+	Vector	surfpt[SINGLEMAP];
+	Vector	facemid;		// world coordinates of center
 
-	vec3_t	texorg;
-	vec3_t	worldtotex[2];	// s = (world - texorg) . worldtotex[0]
-	vec3_t	textoworld[2];	// world = texorg + s * textoworld[0]
+	Vector	texorg;
+	Vector	worldtotex[2];	// s = (world - texorg) . worldtotex[0]
+	Vector	textoworld[2];	// world = texorg + s * textoworld[0]
 
 	vec_t	exactmins[2], exactmaxs[2];
 	
@@ -622,7 +622,7 @@ void CalcFaceVectors (lightinfo_t *l)
 {
 	texinfo_t	*tex;
 	int			i, j;
-	vec3_t	texnormal;
+	Vector	texnormal;
 	vec_t	distscale;
 	vec_t	dist, len;
 
@@ -694,7 +694,7 @@ void CalcPoints (lightinfo_t *l)
 	vec_t	starts, startt, us, ut;
 	vec_t	*surf;
 	vec_t	mids, midt;
-	vec3_t	origin;
+	Vector	origin;
 
 	surf = l->surfpt[0];
 	mids = (l->exactmaxs[0] + l->exactmins[0])/2;
@@ -787,8 +787,8 @@ void CalcPoints (lightinfo_t *l)
 
 typedef struct
 {
-	vec3_t		pos;
-	vec3_t		light;
+	Vector		pos;
+	Vector		light;
 } sample_t;
 
 typedef struct
@@ -838,7 +838,7 @@ void CreateDirectLights (void)
 	char	*name;
 	char	*target;
 	float	angle;
-	vec3_t	dest;
+	Vector	dest;
 
 	numdlights = 0;
 
@@ -963,7 +963,7 @@ void CreateDirectLights (void)
 			}
 			else
 			{	// point down angle
-				vec3_t vAngles;
+				Vector vAngles;
 				GetVectorForKey( e, "angles", vAngles );
 
 				angle = (float)FloatForKey (e, "angle");
@@ -1061,12 +1061,12 @@ float	r_avertexnormals[NUMVERTEXNORMALS][3] = {
 
 #define VectorMaximum(a) ( max( (a)[0], max( (a)[1], (a)[2] ) ) )
 
-void GatherSampleLight (vec3_t pos, byte *pvs, vec3_t normal, vec3_t *sample, byte *styles)
+void GatherSampleLight (Vector pos, byte *pvs, Vector normal, Vector *sample, byte *styles)
 {
 	int				i;
 	directlight_t	*l;
-	vec3_t			add;
-	vec3_t			delta;
+	Vector			add;
+	Vector			delta;
 	float			dot, dot2;
 	float			dist;
 	float			ratio;
@@ -1167,9 +1167,9 @@ void GatherSampleLight (vec3_t pos, byte *pvs, vec3_t normal, vec3_t *sample, by
 	}
 	if (sky_used && indirect_sun != 0.0)
 	{
-		vec3_t total;
+		Vector total;
 		int j;
-		vec3_t sky_intensity;
+		Vector sky_intensity;
 
 		VectorScale( sky_used->intensity, indirect_sun / (NUMVERTEXNORMALS * 2), sky_intensity );
 
@@ -1223,7 +1223,7 @@ for the radiosity pass.
 void AddSampleToPatch (sample_t *s, int facenum)
 {
 	patch_t	*patch;
-	vec3_t	mins, maxs;
+	Vector	mins, maxs;
 	int		i;
 
 	if (numbounce == 0)
@@ -1255,12 +1255,12 @@ nextpatch:;
 }
 
 void
-GetPhongNormal( int facenum, vec3_t spot, vec3_t phongnormal )
+GetPhongNormal( int facenum, Vector spot, Vector phongnormal )
 {
 	int	j;
 	dface_t		*f = dfaces + facenum;
 	dplane_t	*p = dplanes + f->planenum;
-	vec3_t		facenormal;
+	Vector		facenormal;
 
 	VectorCopy( p->normal, facenormal );
 	if ( f->side )
@@ -1277,11 +1277,11 @@ GetPhongNormal( int facenum, vec3_t spot, vec3_t phongnormal )
 
 		for (j=0 ; j<f->numedges ; j++)
 		{
-			vec3_t	p1, p2, v1, v2, vspot;
+			Vector	p1, p2, v1, v2, vspot;
 			int e = dsurfedges[f->firstedge + j];
 			int e1 = dsurfedges[f->firstedge + ((j-1)%f->numedges)];
 			int e2 = dsurfedges[f->firstedge + ((j+1)%f->numedges)];
-			vec3_t	n1, n2;
+			Vector	n1, n2;
 			edgeshare_t	*es = &edgeshare[abs(e)];
 			edgeshare_t	*es1 = &edgeshare[abs(e1)];
 			edgeshare_t	*es2 = &edgeshare[abs(e2)];
@@ -1322,7 +1322,7 @@ GetPhongNormal( int facenum, vec3_t spot, vec3_t phongnormal )
 			if ( a1 >= 0.0 && a2 >= 0.0)
 			{
 				// calculate distance from edge to pos
-				vec3_t	temp;
+				Vector	temp;
 				VectorAdd( es->interface_normal, es1->interface_normal, n1 );
 
 				if ( VectorCompare( n1, vec3_origin ) )
@@ -1358,7 +1358,7 @@ BuildFacelights
 void BuildFacelights (int facenum)
 {
 	dface_t		*f;
-	vec3_t		sampled[MAXLIGHTMAPS];
+	Vector		sampled[MAXLIGHTMAPS];
 	lightinfo_t	l;
 	int			i, j, k;
 	sample_t	*s;
@@ -1367,7 +1367,7 @@ void BuildFacelights (int facenum)
 	byte		pvs[(MAX_MAP_LEAFS+7)/8];
     int         thisoffset = -1, lastoffset = -1;
 	int			lightmapwidth, lightmapheight, size;
-	vec3_t centroid = { 0, 0, 0 };
+	Vector centroid = { 0, 0, 0 };
 
 	f = &dfaces[facenum];
 
@@ -1417,7 +1417,7 @@ void BuildFacelights (int facenum)
 	spot = l.surfpt[0];
 	for (i=0 ; i<l.numsurfpt ; i++, spot += 3)
 	{
-		vec3_t	pointnormal = {0,0,0};
+		Vector	pointnormal = {0,0,0};
 
 		for (k=0 ; k<MAXLIGHTMAPS; k++)
 			VectorCopy (spot, facelight[facenum].samples[k][i].pos);
@@ -1449,7 +1449,7 @@ void BuildFacelights (int facenum)
 		if ( extra )
 		{
 			int		weighting[3][3] = { { 5, 9, 5 }, { 9, 16, 9 }, { 5, 9, 5 } };
-			vec3_t	pos;
+			Vector	pos;
 			int		s, t, subsamples = 0;
 			for ( t = -1; t <= 1; t ++ )
 			{
@@ -1461,7 +1461,7 @@ void BuildFacelights (int facenum)
 					if ( (0 <= s+sample_s) && (s+sample_s < lightmapwidth)
 					  && (0 <= t+sample_t) && (t+sample_t < lightmapheight) )
 					{
-						vec3_t		subsampled[MAXLIGHTMAPS];
+						Vector		subsampled[MAXLIGHTMAPS];
 						for( j = 0; j < MAXLIGHTMAPS; j++)
 							VectorFill( subsampled[j], 0 );
 						// Calculate the point one third of the way toward the "subsample point"
@@ -1507,7 +1507,7 @@ void BuildFacelights (int facenum)
 		{
 			if (patch->samples)
 			{ 
-				vec3_t v;		// BUGBUG: Use a weighted average instead?
+				Vector v;		// BUGBUG: Use a weighted average instead?
 				VectorScale( patch->samplelight, (1.0f/patch->samples), v );
 				VectorAdd( patch->totallight, v, patch->totallight );
 				VectorAdd( patch->directlight, v, patch->directlight );
@@ -1612,7 +1612,7 @@ void FinalLightFace (int facenum)
 {
 	dface_t	*f, *f2;
 	int		i, j, k;
-	vec3_t	lb, v;
+	Vector	lb, v;
 	patch_t	*patch;
 	triangulation_t	*trian;
 	edgeshare_t	*es;

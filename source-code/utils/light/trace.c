@@ -12,7 +12,7 @@
 typedef struct tnode_s
 {
 	int		type;
-	vec3_t	normal;
+	Vector	normal;
 	float	dist;
 	int		children[2];
 	int		pad;
@@ -88,7 +88,7 @@ by recursive subdivision of the line by the BSP tree.
 
 typedef struct
 {
-	vec3_t	backpt;
+	Vector	backpt;
 	int		side;
 	int		node;
 } tracestack_t;
@@ -99,7 +99,7 @@ typedef struct
 TestLine
 ==============
 */
-qboolean TestLine (vec3_t start, vec3_t stop)
+qboolean TestLine (Vector start, Vector stop)
 {
 	int				node;
 	float			front, back;

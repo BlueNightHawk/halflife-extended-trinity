@@ -22,7 +22,7 @@
 
 typedef struct
 {
-	vec3_t		normal;
+	Vector		normal;
 	float		dist;
 } plane_t;
 
@@ -33,7 +33,7 @@ typedef struct
 {
 	qboolean	original;			// don't free, it's part of the portal
 	int		numpoints;
-	vec3_t	points[MAX_POINTS_ON_FIXED_WINDING];			// variable sized
+	Vector	points[MAX_POINTS_ON_FIXED_WINDING];			// variable sized
 } winding_t;
 
 winding_t	*NewWinding (int points);
